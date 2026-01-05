@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/src/">
+    <Project Path="Fodo.Application/Fodo.Application.csproj" />
+    <Project Path="src/Fodo.API/Fodo.API.csproj" />
+    <Project Path="src/Fodo.Contracts/Fodo.Contracts.csproj" />
+    <Project Path="src/Fodo.Domain/Fodo.Domain.csproj" />
+    <Project Path="src/Fodo.Infrastructure/Fodo.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Fodo.IntegrationTests/Fodo.IntegrationTests.csproj" />
+    <Project Path="tests/Fodo.UnitTests/Fodo.UnitTests.csproj" />
+  </Folder>
+</Solution>
