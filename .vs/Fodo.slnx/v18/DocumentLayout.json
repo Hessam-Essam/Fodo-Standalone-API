@@ -3,28 +3,28 @@
   "WorkspaceRootPath": "D:\\Projects\\Fodo\\Fodo\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{9236B21A-8C74-4A12-9552-065BCB1171E1}|src\\Fodo.Contracts\\Fodo.Contracts.csproj|d:\\projects\\fodo\\fodo\\src\\fodo.contracts\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{9236B21A-8C74-4A12-9552-065BCB1171E1}|src\\Fodo.Contracts\\Fodo.Contracts.csproj|solutionrelative:src\\fodo.contracts\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\src\\Fodo.Contracts\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fodo.Contracts\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{172B66BF-D6D6-453A-9EBB-ACC4DB97E31A}|tests\\Fodo.IntegrationTests\\Fodo.IntegrationTests.csproj|d:\\projects\\fodo\\fodo\\tests\\fodo.integrationtests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{172B66BF-D6D6-453A-9EBB-ACC4DB97E31A}|tests\\Fodo.IntegrationTests\\Fodo.IntegrationTests.csproj|solutionrelative:tests\\fodo.integrationtests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\tests\\Fodo.IntegrationTests\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:tests\\Fodo.IntegrationTests\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DD83D350-E7BA-482D-A557-07A11CEB7BE6}|tests\\Fodo.UnitTests\\Fodo.UnitTests.csproj|d:\\projects\\fodo\\fodo\\tests\\fodo.unittests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DD83D350-E7BA-482D-A557-07A11CEB7BE6}|tests\\Fodo.UnitTests\\Fodo.UnitTests.csproj|solutionrelative:tests\\fodo.unittests\\unittest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\tests\\Fodo.UnitTests\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:tests\\Fodo.UnitTests\\UnitTest1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{037C9BC8-DDD5-4F4B-A8D5-52BC068BD085}|src\\Fodo.Infrastructure\\Fodo.Infrastructure.csproj|d:\\projects\\fodo\\fodo\\src\\fodo.infrastructure\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{037C9BC8-DDD5-4F4B-A8D5-52BC068BD085}|src\\Fodo.Infrastructure\\Fodo.Infrastructure.csproj|solutionrelative:src\\fodo.infrastructure\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\src\\Fodo.Infrastructure\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fodo.Infrastructure\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{0480DAC8-55AF-4820-9B51-C674DB61DECB}|src\\Fodo.Domain\\Fodo.Domain.csproj|d:\\projects\\fodo\\fodo\\src\\fodo.domain\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0480DAC8-55AF-4820-9B51-C674DB61DECB}|src\\Fodo.Domain\\Fodo.Domain.csproj|solutionrelative:src\\fodo.domain\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\src\\Fodo.Domain\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fodo.Domain\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{801A6A31-DA97-485D-A9B4-F40FEB88C308}|Fodo.Application\\Fodo.Application.csproj|d:\\projects\\fodo\\fodo\\fodo.application\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{801A6A31-DA97-485D-A9B4-F40FEB88C308}|Fodo.Application\\Fodo.Application.csproj|solutionrelative:fodo.application\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Projects\\Fodo\\Fodo\\Fodo.Application\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Fodo.Application\\Class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -44,10 +44,8 @@
               "RelativeDocumentMoniker": "src\\Fodo.Contracts\\Class1.cs",
               "ToolTip": "D:\\Projects\\Fodo\\Fodo\\src\\Fodo.Contracts\\Class1.cs",
               "RelativeToolTip": "src\\Fodo.Contracts\\Class1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T21:32:15.928Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T21:32:15.928Z"
             },
             {
               "$type": "Document",
@@ -59,8 +57,7 @@
               "RelativeToolTip": "tests\\Fodo.IntegrationTests\\UnitTest1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T21:24:05.576Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T21:24:05.576Z"
             },
             {
               "$type": "Document",
@@ -72,8 +69,7 @@
               "RelativeToolTip": "tests\\Fodo.UnitTests\\UnitTest1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T21:21:55.208Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T21:21:55.208Z"
             },
             {
               "$type": "Document",
@@ -85,8 +81,7 @@
               "RelativeToolTip": "src\\Fodo.Infrastructure\\Class1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T20:45:25.417Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T20:45:25.417Z"
             },
             {
               "$type": "Document",
@@ -98,8 +93,7 @@
               "RelativeToolTip": "src\\Fodo.Domain\\Class1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T20:44:43.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T20:44:43.206Z"
             },
             {
               "$type": "Document",
@@ -111,8 +105,15 @@
               "RelativeToolTip": "Fodo.Application\\Class1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-05T20:41:48.186Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-05T20:41:48.186Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{c6f34f0d-7ae5-4f3a-be61-fe0c21ae9eb8}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             }
           ]
         }
