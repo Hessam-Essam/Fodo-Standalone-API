@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Fodo.Contracts/1.0.0": {
+        "runtime": {
+          "Fodo.Contracts.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Fodo.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

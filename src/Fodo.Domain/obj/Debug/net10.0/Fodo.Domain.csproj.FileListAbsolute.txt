@@ -1,0 +1,11 @@
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\bin\Debug\net10.0\Fodo.Domain.deps.json
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\bin\Debug\net10.0\Fodo.Domain.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\bin\Debug\net10.0\Fodo.Domain.pdb
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.AssemblyInfoInputs.cache
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.AssemblyInfo.cs
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.csproj.CoreCompileInputs.cache
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\refint\Fodo.Domain.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\Fodo.Domain.pdb
+D:\Projects\Fodo\Fodo\src\Fodo.Domain\obj\Debug\net10.0\ref\Fodo.Domain.dll

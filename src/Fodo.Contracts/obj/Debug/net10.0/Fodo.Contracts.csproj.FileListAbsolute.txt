@@ -1,0 +1,11 @@
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\bin\Debug\net10.0\Fodo.Contracts.deps.json
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\bin\Debug\net10.0\Fodo.Contracts.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\bin\Debug\net10.0\Fodo.Contracts.pdb
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.AssemblyInfoInputs.cache
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.AssemblyInfo.cs
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.csproj.CoreCompileInputs.cache
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\refint\Fodo.Contracts.dll
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\Fodo.Contracts.pdb
+D:\Projects\Fodo\Fodo\src\Fodo.Contracts\obj\Debug\net10.0\ref\Fodo.Contracts.dll
