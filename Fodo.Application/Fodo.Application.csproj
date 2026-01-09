@@ -18,4 +18,8 @@
     <Folder Include="Features\Users\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\src\Fodo.Domain\Fodo.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
