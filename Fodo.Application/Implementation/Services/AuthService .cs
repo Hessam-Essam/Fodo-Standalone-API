@@ -10,14 +10,11 @@ namespace Fodo.Application.Implementation.Services
     public class AuthService : IAuthService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtTokenGenerator _jwt;
 
         public AuthService(
-            IUserRepository userRepository,
-            IJwtTokenGenerator jwt)
+            IUserRepository userRepository)
         {
             _userRepository = userRepository;
-            _jwt = jwt;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginRequest request)
