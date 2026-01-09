@@ -16,4 +16,8 @@
     <Folder Include="HealthChecks\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Fodo.Application\Fodo.Application.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,6 @@
-﻿using Fodo.Application.Implementation.Interfaces;
+﻿using Fodo.Application.Features.Login;
+using Fodo.Application.Handlers;
+using Fodo.Application.Implementation.Interfaces;
 using Fodo.Application.Implementation.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -34,8 +36,8 @@ namespace Fodo.Application.Implementation.Services
                 throw new UnauthorizedAccessException("Invalid credentials");
 
             // 4️⃣ Validate branch access
-            if (!user.UserBranches.Any(b => b.BranchId == request.BranchId))
-                throw new UnauthorizedAccessException("Branch access denied");
+            //if (!user.UserBranches.Any(b => b.BranchId == request.BranchId))
+            //    throw new UnauthorizedAccessException("Branch access denied");
 
             // 5️⃣ Validate role
             if (!user.Role.IsActive)
@@ -45,20 +47,14 @@ namespace Fodo.Application.Implementation.Services
             var permissions = user.Role.Permissions
                 .Select(p => p.Permission.Code)
                 .ToList();
-
-            // 7️⃣ Generate token
-            var token = _jwt.Generate(user, permissions, request.BranchId);
-
             return new LoginResponse
             {
-                Token = token,
-                User = new LoggedUserDto
+                User = new LoginUserDto
                 {
                     Id = user.Id,
-                    FullName = user.FullNameEn,
-                    RoleName = user.Role.NameEn
-                },
-                Permissions = permissions
+                    Username = user.FullNameEn,
+                    Role = user.Role.NameEn
+                }
             };
         }
     }

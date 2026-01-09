@@ -17,14 +17,10 @@ namespace Fodo.Application.Features.Login
             => new() { Success = false, Error = error };
 
         public static LoginResponse Ok(
-            string token,
-            int expiresIn,
             LoginUserDto user)
             => new()
             {
                 Success = true,
-                AccessToken = token,
-                ExpiresIn = expiresIn,
                 User = user
             };
     }
