@@ -11,14 +11,7 @@ namespace Fodo.Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.Username)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            builder.HasIndex(x => x.Username)
-                .IsUnique();
+            builder.HasKey(x => x.UserId);
 
             builder.Property(x => x.PasswordHash)
                 .IsRequired();

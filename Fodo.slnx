@@ -6,6 +6,7 @@
     <Project Path="src/Fodo.Contracts/Fodo.Contracts.csproj" />
     <Project Path="src/Fodo.Domain/Fodo.Domain.csproj" />
     <Project Path="src/Fodo.Infrastructure/Fodo.Infrastructure.csproj" />
+    <Project Path="src/Fodo.Web/Fodo.Web.csproj" Id="d1be15e5-5748-4e7a-a634-018a6aae1d2b" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Fodo.IntegrationTests/Fodo.IntegrationTests.csproj" />

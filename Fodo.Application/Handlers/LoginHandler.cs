@@ -36,8 +36,7 @@ namespace Fodo.Application.Handlers
             return LoginResponse.Ok(
             user: new LoginUserDto
             {
-                Id = user.Id,
-                Username = user.Username,
+                Id = user.UserId,
                 Role = user.Role.NameEn
             });
         }

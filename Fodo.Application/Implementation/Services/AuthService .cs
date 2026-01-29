@@ -51,7 +51,7 @@ namespace Fodo.Application.Implementation.Services
             {
                 User = new LoginUserDto
                 {
-                    Id = user.Id,
+                    Id = user.UserId,
                     Username = user.FullNameEn,
                     Role = user.Role.NameEn
                 }

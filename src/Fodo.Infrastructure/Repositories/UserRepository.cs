@@ -21,7 +21,7 @@ namespace Fodo.Infrastructure.Repositories
         {
             return await _context.Users
                 .AsNoTracking()
-                .Where(u => u.Username == username)
+                .Where(u => u.UserName == username)
                 .Include(u => u.Role)
                     .ThenInclude(r => r.Permissions)
                         .ThenInclude(rp => rp.Permission)

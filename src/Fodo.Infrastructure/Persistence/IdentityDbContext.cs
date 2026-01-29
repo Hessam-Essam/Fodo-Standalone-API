@@ -1,5 +1,6 @@
 ﻿using Fodo.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,11 +19,27 @@ namespace Fodo.Infrastructure.Persistence
         public DbSet<Permission> Permissions => Set<Permission>();
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<UserBranch> UserBranches => Set<UserBranch>();
+        public DbSet<Clients> Clients => Set<Clients>();
+        public DbSet<Branches> Branches => Set<Branches>();
+        public DbSet<Devices> Devices => Set<Devices>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(
                 typeof(IdentityDbContext).Assembly);
+        }
+    }
+
+    public sealed class IdentityDbContextFactory : IDesignTimeDbContextFactory<IdentityDbContext>
+    {
+        public IdentityDbContext CreateDbContext(string[] args)
+        {
+            var options = new DbContextOptionsBuilder<IdentityDbContext>()
+                .UseSqlServer("Server=.;Database=Fodo_DB;Integrated Security=True;MultipleActiveResultSets=True;Trusted_Connection=True;")
+                .Options;
+
+            return new IdentityDbContext(options);
         }
     }
 
