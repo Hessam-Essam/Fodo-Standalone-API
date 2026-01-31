@@ -1,5 +1,7 @@
-﻿using Fodo.Application.Implementation.Interfaces;
+﻿using Fodo.API.Responses;
+using Fodo.Application.Implementation.Interfaces;
 using Fodo.Contracts.DTOS;
+using Fodo.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fodo.API.Controllers
@@ -16,6 +18,17 @@ namespace Fodo.API.Controllers
         {
             var result = await _service.GetByClientCodeAsync(clientCode, ct);
             return result is null ? NotFound() : Ok(result);
+        }
+
+        [HttpGet("GetByBranchId")]
+        public async Task<IActionResult> GetByBranchId(int branchId)
+        {
+            var result = await _service.GetBranchCatalogAsync(branchId);
+
+            if (!result.Success)
+                return BadRequest(new ApiResponse<BranchCatalogResponse>(400, result));
+
+            return Ok(new ApiResponse<BranchCatalogResponse>(200, result));
         }
     }
 }

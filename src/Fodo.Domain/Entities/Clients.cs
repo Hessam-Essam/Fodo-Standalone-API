@@ -44,6 +44,10 @@ namespace Fodo.Domain.Entities
         public string? DatabaseType { get; set; }
         [Column("database_connection_string")]
         public string? DatabaseConnectionString { get; set; }
-        
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
+        public ICollection<Categories> Categories { get; set; } = new List<Categories>();
+        public ICollection<Items> Items { get; set; } = new List<Items>();
+        public ICollection<TaxRules> TaxRules { get; set; } = new List<TaxRules>();
+        public ICollection<PriceLists> PriceLists { get; set; } = new List<PriceLists>();
     }
 }

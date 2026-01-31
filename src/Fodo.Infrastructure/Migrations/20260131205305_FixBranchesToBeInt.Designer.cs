@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Fodo.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20260129142051_AddFKToBranchId")]
-    partial class AddFKToBranchId
+    [Migration("20260131205305_FixBranchesToBeInt")]
+    partial class FixBranchesToBeInt
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,7 +71,55 @@ namespace Fodo.Infrastructure.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Branches");
+                    b.ToTable("Branches", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Categories", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("CategoryId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("CategoryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Categories", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.CategoryBranches", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoryId", "BranchId");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("CategoryBranches", (string)null);
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.Clients", b =>
@@ -186,6 +234,72 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("Devices");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.ItemPricelists", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PricelistId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("ItemId", "PricelistId");
+
+                    b.HasIndex("PricelistId");
+
+                    b.ToTable("ItemPricelists", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Items", b =>
+                {
+                    b.Property<int>("ItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
+
+                    b.Property<decimal>("BasePrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("clientId");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ItemType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int?>("TaxRuleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ItemId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("TaxRuleId");
+
+                    b.ToTable("Items", (string)null);
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -205,11 +319,47 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("Permissions");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.PriceLists", b =>
+                {
+                    b.Property<int>("PriceListId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PriceListId"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("clientId");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NameAr")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("PriceListId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("PriceLists", (string)null);
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -229,6 +379,8 @@ namespace Fodo.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.ToTable("Roles");
                 });
 
@@ -247,6 +399,36 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("RolePermissions");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
+                {
+                    b.Property<int>("TaxRuleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TaxRuleId"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<string>("NameAR")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameEN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("TaxRuleId");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("TaxRules");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("UserId")
@@ -255,6 +437,10 @@ namespace Fodo.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<int?>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
 
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
@@ -315,22 +501,40 @@ namespace Fodo.Infrastructure.Migrations
 
                     b.HasKey("UserId");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("RoleId");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Fodo.Domain.Entities.UserBranch", b =>
+            modelBuilder.Entity("Fodo.Domain.Entities.UserBranches", b =>
                 {
+                    b.Property<int>("UserBranchId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserBranchId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BranchId")
+                    b.Property<Guid>("UserId1")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId", "BranchId");
+                    b.HasKey("UserBranchId");
 
-                    b.ToTable("UserBranches");
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("UserId1");
+
+                    b.HasIndex("UserId", "BranchId")
+                        .IsUnique();
+
+                    b.ToTable("UserBranches", (string)null);
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.Branches", b =>
@@ -344,6 +548,36 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("Clients");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.Categories", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany("Categories")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.CategoryBranches", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branches")
+                        .WithMany("CategoryBranches")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Categories", "Category")
+                        .WithMany("CategoryBranches")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branches");
+
+                    b.Navigation("Category");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Devices", b =>
                 {
                     b.HasOne("Fodo.Domain.Entities.Branches", "Branches")
@@ -353,6 +587,72 @@ namespace Fodo.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Branches");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ItemPricelists", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Items", "Items")
+                        .WithMany("ItemPricelists")
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.PriceLists", "PriceList")
+                        .WithMany("ItemPricelists")
+                        .HasForeignKey("PricelistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Items");
+
+                    b.Navigation("PriceList");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Items", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Categories", "Category")
+                        .WithMany("Items")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany("Items")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.TaxRules", "TaxRule")
+                        .WithMany("Items")
+                        .HasForeignKey("TaxRuleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Clients");
+
+                    b.Navigation("TaxRule");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.PriceLists", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany("PriceLists")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Role", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany("Roles")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Clients");
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.RolePermission", b =>
@@ -374,29 +674,104 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany("TaxRules")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.User", b =>
                 {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany()
+                        .HasForeignKey("ClientId");
+
                     b.HasOne("Fodo.Domain.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Clients");
+
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Fodo.Domain.Entities.UserBranch", b =>
+            modelBuilder.Entity("Fodo.Domain.Entities.UserBranches", b =>
                 {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branch")
+                        .WithMany("UserBranches")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Fodo.Domain.Entities.User", null)
                         .WithMany("UserBranches")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Branches", b =>
+                {
+                    b.Navigation("CategoryBranches");
+
+                    b.Navigation("UserBranches");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Categories", b =>
+                {
+                    b.Navigation("CategoryBranches");
+
+                    b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Clients", b =>
+                {
+                    b.Navigation("Categories");
+
+                    b.Navigation("Items");
+
+                    b.Navigation("PriceLists");
+
+                    b.Navigation("Roles");
+
+                    b.Navigation("TaxRules");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Items", b =>
+                {
+                    b.Navigation("ItemPricelists");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.PriceLists", b =>
+                {
+                    b.Navigation("ItemPricelists");
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.Role", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
+                {
+                    b.Navigation("Items");
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.User", b =>

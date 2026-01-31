@@ -36,5 +36,7 @@ namespace Fodo.Domain.Entities
         public int ClientId { get; set; }
 
         public Clients Clients { get; set; }
+        public ICollection<CategoryBranches> CategoryBranches { get; set; }
+        public ICollection<UserBranches> UserBranches { get; set; }
     }
 }

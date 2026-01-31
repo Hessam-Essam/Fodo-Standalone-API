@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Fodo.Domain.Entities
@@ -14,6 +15,11 @@ namespace Fodo.Domain.Entities
 
         public bool IsActive { get; set; }
 
+        [ForeignKey(nameof(Clients))]
+        [Column("client_id")]
+        public int? ClientId { get; set; }
+
+        public Clients Clients { get; set; }
         public ICollection<RolePermission> Permissions { get; set; }
     }
 

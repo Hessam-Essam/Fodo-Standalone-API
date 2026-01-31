@@ -2,31 +2,19 @@
 using Fodo.Domain.Entities;
 using Fodo.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Fodo.Infrastructure.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly IdentityDbContext _context;
+        private readonly IdentityDbContext _db;
+        public UserRepository(IdentityDbContext db) => _db = db;
 
-        public UserRepository(IdentityDbContext context)
+        public Task<List<User>> GetActiveUsersAsync()
         {
-            _context = context;
-        }
-
-        public async Task<User?> GetLoginAsync(string username)
-        {
-            return await _context.Users
-                .AsNoTracking()
-                .Where(u => u.UserName == username)
-                .Include(u => u.Role)
-                    .ThenInclude(r => r.Permissions)
-                        .ThenInclude(rp => rp.Permission)
-                .Include(u => u.UserBranches)
-                .FirstOrDefaultAsync();
+            return _db.Users
+                .Where(u => u.IsActive)
+                .ToListAsync();
         }
     }
 

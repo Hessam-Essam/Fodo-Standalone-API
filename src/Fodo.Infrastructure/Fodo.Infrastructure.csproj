@@ -10,7 +10,6 @@
     <Folder Include="Messaging\" />
     <Folder Include="Identity\" />
     <Folder Include="ExternalServices\" />
-    <Folder Include="Persistence\" />
   </ItemGroup>
 
   <ItemGroup>

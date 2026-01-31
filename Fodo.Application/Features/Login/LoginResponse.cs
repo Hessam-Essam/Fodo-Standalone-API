@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fodo.Contracts.DTOS;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,14 +11,15 @@ namespace Fodo.Application.Features.Login
         public string? Error { get; init; }
         public string? AccessToken { get; init; }
         public int ExpiresIn { get; init; }
-
-        public LoginUserDto? User { get; init; }
+        public string Message { get; set; }
+        public string Token { get; set; }
+        public UserDto User { get; set; }
 
         public static LoginResponse Fail(string error)
             => new() { Success = false, Error = error };
 
         public static LoginResponse Ok(
-            LoginUserDto user)
+            UserDto user)
             => new()
             {
                 Success = true,

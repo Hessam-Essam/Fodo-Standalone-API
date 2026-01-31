@@ -2,6 +2,9 @@
 using Fodo.Application.Handlers;
 using Fodo.Application.Implementation.Interfaces;
 using Fodo.Application.Implementation.IRepositories;
+using Fodo.Contracts.DTOS;
+using Fodo.Contracts.Requests;
+using Fodo.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,52 +14,65 @@ namespace Fodo.Application.Implementation.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _userRepo;
+        private readonly IPasswordService _passwordService;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(
-            IUserRepository userRepository)
+        public AuthService(IUserRepository userRepo, IPasswordService passwordService, ITokenService tokenService)
         {
-            _userRepository = userRepository;
+            _userRepo = userRepo;
+            _passwordService = passwordService;
+            _tokenService = tokenService;
         }
 
-        public async Task<LoginResponse> LoginAsync(LoginRequest request)
+        public async Task<LoginResponse> LoginAsync(LoginByPasswordRequest request)
         {
-            // 1️⃣ Validate password format
-            if (!Regex.IsMatch(request.Password, @"^\d{6}$"))
-                throw new UnauthorizedAccessException("Invalid password format");
+            if (request == null)
+                return new LoginResponse { Success = false, Message = "Request body is required." };
 
-            // 2️⃣ Get user
-            var user = await _userRepository.GetLoginAsync(request.Username);
+            var code = (request.Password ?? "").Trim();
 
-            if (user == null || !user.IsActive)
-                throw new UnauthorizedAccessException("Invalid credentials");
+            if (code.Length != 6 || !code.All(char.IsDigit))
+                return new LoginResponse { Success = false, Message = "Password must be exactly 6 digits." };
 
-            // 3️⃣ Verify password
-            if (!PasswordHasher.Verify(request.Password, user.PasswordHash))
-                throw new UnauthorizedAccessException("Invalid credentials");
+            var activeUsers = await _userRepo.GetActiveUsersAsync();
+            if (activeUsers == null || activeUsers.Count == 0)
+                return new LoginResponse { Success = false, Message = "No active users found." };
 
-            // 4️⃣ Validate branch access
-            //if (!user.UserBranches.Any(b => b.BranchId == request.BranchId))
-            //    throw new UnauthorizedAccessException("Branch access denied");
+            User matchedUser = null;
 
-            // 5️⃣ Validate role
-            if (!user.Role.IsActive)
-                throw new UnauthorizedAccessException("Role inactive");
+            // Find first user whose hash matches this 6-digit code
+            foreach (var user in activeUsers)
+            {
+                if (user == null) continue;
 
-            // 6️⃣ Load permissions
-            var permissions = user.Role.Permissions
-                .Select(p => p.Permission.Code)
-                .ToList();
+                if (_passwordService.Verify(user, code))
+                {
+                    matchedUser = user;
+                    break;
+                }
+            }
+
+            if (matchedUser == null)
+                return new LoginResponse { Success = false, Message = "Invalid password." };
+
+            var token = _tokenService.GenerateToken(matchedUser);
+
             return new LoginResponse
             {
-                User = new LoginUserDto
+                Success = true,
+                Message = "Login successful.",
+                Token = token,
+                User = new UserDto
                 {
-                    Id = user.UserId,
-                    Username = user.FullNameEn,
-                    Role = user.Role.NameEn
+                    UserId = matchedUser.UserId,
+                    Username = matchedUser.UserName,
+                    FullNameEn = matchedUser.FullNameEn,
+                    FullNameAr = matchedUser.FullNameAr,
+                    RoleId = matchedUser.RoleId,
+                    IsActive = matchedUser.IsActive
                 }
             };
         }
     }
-
 }

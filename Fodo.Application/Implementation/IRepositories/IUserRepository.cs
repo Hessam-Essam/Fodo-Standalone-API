@@ -7,6 +7,6 @@ namespace Fodo.Application.Implementation.IRepositories
 {
     public interface IUserRepository
     {
-        Task<User?> GetLoginAsync(string username);
+        Task<List<User>> GetActiveUsersAsync();
     }
 }

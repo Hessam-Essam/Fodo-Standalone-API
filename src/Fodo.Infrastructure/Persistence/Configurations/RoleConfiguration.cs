@@ -16,6 +16,13 @@ namespace Fodo.Infrastructure.Persistence.Configurations
             builder.Property(x => x.NameEn)
                 .IsRequired()
                 .HasMaxLength(100);
+            builder.Property(x => x.ClientId)
+            .HasColumnName("client_id");   
+
+            builder.HasOne(x => x.Clients)
+                .WithMany(c => c.Roles)         
+                .HasForeignKey(x => x.ClientId)
+                .OnDelete(DeleteBehavior.Restrict); 
 
             builder.HasMany(x => x.Permissions)
                 .WithOne(x => x.Role)
