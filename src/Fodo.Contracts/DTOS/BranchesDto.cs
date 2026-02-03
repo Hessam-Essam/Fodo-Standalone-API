@@ -14,5 +14,8 @@ namespace Fodo.Contracts.DTOS
         public string Phone { get; set; }
         public bool IsActive { get; set; }
         public int ClientId { get; set; }
+        public List<CategoriesDto> Categories { get; set; }
+        public List<PriceListsDto> PriceLists { get; set; }
+        public List<TaxRulesDto> TaxRules { get; set; }
     }
 }

@@ -11,5 +11,7 @@ namespace Fodo.Contracts.DTOS
         public string NameAr { get; set; }
         public bool IsActive { get; set; }
         public int ClientId { get; set; }
+
+        public List<ItemsDto> Items { get; set; }
     }
 }

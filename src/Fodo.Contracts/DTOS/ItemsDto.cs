@@ -13,7 +13,8 @@ namespace Fodo.Contracts.DTOS
         public int CategoryId { get; set; }
         public decimal BasePrice { get; set; }
         public bool IsActive { get; set; }
-        public int? TaxRuleId { get; set; }
-        public int ClientId { get; set; }
+        public TaxRulesDto TaxRule { get; set; }
+
+        public List<ItemPricesDto> Prices { get; set; }
     }
 }

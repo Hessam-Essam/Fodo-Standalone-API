@@ -6,6 +6,7 @@ using Fodo.Infrastructure.Persistence;
 using Fodo.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore; // Add this using directive
 using Microsoft.EntityFrameworkCore;
@@ -56,13 +57,11 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddDefaultTokenProviders();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
+    options.AddPolicy("AppCors", policy =>
+        policy.WithOrigins("https://lightstandalone.fodo.app:8443/")   // your frontend origin
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
 });
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -90,10 +89,10 @@ builder.Services.AddOpenApi();
 
 
 var app = builder.Build();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseRouting();
-// Configure the HTTP request pipeline.
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
+});
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -104,16 +103,32 @@ if (app.Environment.IsDevelopment())
     });
     app.MapOpenApi();
 }
-app.UseSwagger();
+if (!app.Environment.IsDevelopment())
+{
+    // Only if your proxy forwards X-Forwarded-Proto correctly (with UseForwardedHeaders)
+    app.UseHttpsRedirection();
+}
+app.UseSwagger(c =>
+{
+    c.PreSerializeFilters.Add((swagger, httpReq) =>
+    {
+        swagger.Servers = new List<OpenApiServer>
+        {
+            new OpenApiServer { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" }
+        };
+    });
+});
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
     options.RoutePrefix = "swagger"; // URL: /swagger
 });
+app.UseSwagger();
 app.UseHttpsRedirection();
-app.UseCors("AllowAll");
-
-
+app.UseForwardedHeaders();
+app.UseRouting();
+app.UseCors("AppCors");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
-
 app.Run();

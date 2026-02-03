@@ -10,6 +10,5 @@ namespace Fodo.Contracts.DTOS
         public string NameAR { get; set; }
         public string NameEN { get; set; }
         public decimal Rate { get; set; }
-        public int ClientId { get; set; }
     }
 }
