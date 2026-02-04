@@ -26,112 +26,6 @@ namespace Fodo.Application.Implementation.Services
 
         public async Task<BranchCatalogResponse> GetBranchCatalogAsync(int branchId)
         {
-            //if (branchId <= 0)
-            //    return new BranchCatalogResponse { Success = false, Message = "branchId is required." };
-
-            //var branch = await _repo.GetBranchAsync(branchId);
-            //if (branch == null)
-            //    return new BranchCatalogResponse { Success = false, Message = "Branch not found." };
-
-            //var clientId = branch.ClientId;
-
-            //var categoryBranches = await _repo.GetCategoryBranchesByBranchAsync(branchId);
-            //var categoryIds = categoryBranches.Select(x => x.CategoryId).Distinct().ToList();
-
-            //var categories = await _repo.GetCategoriesByIdsAsync(categoryIds);
-            //categories = categories.Where(c => c.ClientId == clientId).ToList();
-
-            //var items = await _repo.GetItemsByCategoryIdsAsync(categoryIds);
-            //items = items.Where(i => i.ClientId == clientId).ToList();
-
-            //var itemIds = items.Select(i => i.ItemId).Distinct().ToList();
-            //var itemPricelists = await _repo.GetItemPricelistsByItemIdsAsync(itemIds);
-
-            //var priceLists = await _repo.GetPriceListsByClientAsync(clientId);
-            //var taxRules = await _repo.GetTaxRulesByClientAsync(clientId);
-
-            //var branches = new List<BranchesDto>
-            //{
-            //    new BranchesDto
-            //    {
-            //        BranchId = branch.BranchId,
-            //        NameEn = branch.NameEn,
-            //        NameAr = branch.NameAr,
-            //        IsActive = branch.IsActive,
-            //        ClientId = branch.ClientId
-            //    }
-            //};
-
-            //var categoriesDto = categories.Select(c => new CategoriesDto
-            //{
-            //    CategoryId = c.CategoryId,
-            //    NameEn = c.NameEn,
-            //    NameAr = c.NameAr,
-            //    IsActive = c.IsActive,
-            //    ClientId = c.ClientId
-            //}).ToList();
-
-            //var categoryBranchesDto = categoryBranches.Select(cb => new CategoryBranchesDto
-            //{
-            //    CategoryId = cb.CategoryId,
-            //    BranchId = cb.BranchId
-            //}).ToList();
-
-            //var itemsDto = items.Select(i => new ItemsDto
-            //{
-            //    ItemId = i.ItemId,
-            //    NameEn = i.NameEn,
-            //    NameAr = i.NameAr,
-            //    ItemType = i.ItemType,
-            //    CategoryId = i.CategoryId,
-            //    BasePrice = i.BasePrice,
-            //    IsActive = i.IsActive,
-            //    TaxRuleId = i.TaxRuleId,
-            //    ClientId = i.ClientId
-            //}).ToList();
-
-            //var itemPricelistsDto = itemPricelists.Select(ip => new ItemPricelistsDto
-            //{
-            //    ItemId = ip.ItemId,
-            //    PricelistId = ip.PricelistId,
-            //    Price = ip.Price
-            //}).ToList();
-
-            //var priceListsDto = priceLists.Select(pl => new PriceListsDto
-            //{
-            //    PriceListId = pl.PriceListId,
-            //    NameEn = pl.NameEn,
-            //    NameAr = pl.NameAr,
-            //    IsActive = pl.IsActive,
-            //    ClientId = pl.ClientId
-            //}).ToList();
-
-            //var taxRulesDto = taxRules.Select(tr => new TaxRulesDto
-            //{
-            //    TaxRuleId = tr.TaxRuleId,
-            //    NameAR = tr.NameAR,
-            //    NameEN = tr.NameEN,
-            //    Rate = tr.Rate,
-            //    ClientId = tr.ClientId
-            //}).ToList();
-
-            //var branchesDto = branches;
-
-            //return new BranchCatalogResponse
-            //{
-            //    Success = true,
-            //    Message = "Catalog loaded successfully",
-            //    Menu = new MenuDto
-            //    {
-            //        Categories = categoriesDto,
-            //        CategoryBranches = categoryBranchesDto,
-            //        Items = itemsDto,
-            //        ItemPricelists = itemPricelistsDto,
-            //        PriceLists = priceListsDto,
-            //        TaxRules = taxRulesDto,
-            //        Branches = branchesDto
-            //    }
-            //};
             if (branchId <= 0)
                 return new BranchCatalogResponse
                 {
@@ -139,7 +33,7 @@ namespace Fodo.Application.Implementation.Services
                     Message = "branchId is required."
                 };
 
-            // ✅ Load branch
+            // Load branch
             var branch = await _repo.GetBranchAsync(branchId);
 
             if (branch == null)
@@ -151,7 +45,7 @@ namespace Fodo.Application.Implementation.Services
 
             int clientId = branch.ClientId;
 
-            // ✅ CategoryBranches → Categories
+            // CategoryBranches → Categories
             var categoryBranches = await _repo.GetCategoryBranchesByBranchAsync(branchId);
 
             var categoryIds = categoryBranches
@@ -161,19 +55,19 @@ namespace Fodo.Application.Implementation.Services
 
             var categories = await _repo.GetCategoriesByIdsAsync(categoryIds);
 
-            // ✅ Items under categories
+            // Items under categories
             var items = await _repo.GetItemsByCategoryIdsAsync(categoryIds);
 
             var itemIds = items.Select(i => i.ItemId).Distinct().ToList();
 
-            // ✅ Prices per item
+            // Prices per item
             var itemPricelists = await _repo.GetItemPricelistsByItemIdsAsync(itemIds);
 
-            // ✅ Shared lookups
+            // Shared lookups
             var priceLists = await _repo.GetPriceListsByClientAsync(clientId);
             var taxRules = await _repo.GetTaxRulesByClientAsync(clientId);
 
-            // ✅ Group for nesting
+            // Group for nesting
             var itemsByCategory = items.GroupBy(x => x.CategoryId)
                 .ToDictionary(g => g.Key, g => g.ToList());
             var priceListLookup = priceLists.ToDictionary(
@@ -204,7 +98,7 @@ namespace Fodo.Application.Implementation.Services
         }).ToList()
     );
 
-            // ✅ Build nested categories
+            // Build nested categories
             var categoryNodes = new List<CategoriesDto>();
 
             foreach (var cat in categories)
@@ -250,7 +144,6 @@ namespace Fodo.Application.Implementation.Services
                 categoryNodes.Add(catNode);
             }
 
-            // ✅ Final branch node
             var branchNode = new BranchesDto
             {
                 BranchId = branch.BranchId,
