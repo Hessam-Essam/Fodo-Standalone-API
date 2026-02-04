@@ -32,8 +32,8 @@ namespace Fodo.Application.Implementation.Services
 
             var code = (request.Password ?? "").Trim();
 
-            if (code.Length != 6 || !code.All(char.IsDigit))
-                return new LoginResponse { Success = false, Message = "Password must be exactly 6 digits." };
+            if (code.Length != 5 || !code.All(char.IsDigit))
+                return new LoginResponse { Success = false, Message = "Password must be exactly 5 digits." };
 
             var activeUsers = await _userRepo.GetActiveUsersAsync();
             if (activeUsers == null || activeUsers.Count == 0)

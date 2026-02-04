@@ -20,8 +20,8 @@ namespace Fodo.API.Controllers
             return result is null ? NotFound() : Ok(result);
         }
 
-        [HttpGet("GetByBranchId")]
-        public async Task<IActionResult> GetByBranchId(int branchId)
+        [HttpGet("GetMenuByBranchId")]
+        public async Task<IActionResult> GetMenuByBranchId(int branchId)
         {
             var result = await _service.GetBranchCatalogAsync(branchId);
 

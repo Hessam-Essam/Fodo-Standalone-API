@@ -19,7 +19,7 @@ namespace Fodo.API.Controllers
 
             if (!result.Success)
             {
-                if (result.Message.Contains("required") || result.Message.Contains("6 digits"))
+                if (result.Message.Contains("required") || result.Message.Contains("5 digits"))
                     return BadRequest(result);
 
                 return Unauthorized(result);
