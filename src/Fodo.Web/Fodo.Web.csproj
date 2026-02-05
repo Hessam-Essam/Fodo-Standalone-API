@@ -10,4 +10,9 @@
     <Content Remove="wwwroot\js\site.js" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Fodo.Application\Fodo.Application.csproj" />
+    <ProjectReference Include="..\Fodo.API\Fodo.API.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -10,6 +10,6 @@ namespace Fodo.Web.ViewModels
         [Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string Error { get; set; }
+        public string? Error { get; set; }
     }
 }

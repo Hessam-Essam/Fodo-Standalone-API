@@ -8,5 +8,6 @@ namespace Fodo.Application.Implementation.IRepositories
     public interface IUserRepository
     {
         Task<List<User>> GetActiveUsersAsync();
+        Task<User> GetByNormalizedUsernameAsync(string normalizedUsername);
     }
 }

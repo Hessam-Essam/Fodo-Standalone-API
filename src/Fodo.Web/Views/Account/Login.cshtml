@@ -1,0 +1,641 @@
+﻿@using Fodo.Web.ViewModels
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <title>تسجيل الدخول - فودو</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <style>
+        
+
+        :root {
+            --primary: #00b9f3;
+            --primary-dark: #0095cc;
+            --text-dark: #1f1f1f;
+            --muted: #8f9bb3;
+            --border-light: #e4e9f2;
+            --bg: #f7f9fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'LoewArabic';
+            background: #e4edf6;
+            direction: rtl;
+            color: var(--text-dark);
+        }
+
+        .page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* padding: 24px; */
+        }
+
+        .card {
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row-reverse; /* form on the right, hero on the left */
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .left-panel {
+            flex: 0 0 45%;
+            padding: 40px 64px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #ffffff;
+        }
+
+        .left-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .language-switch {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .language-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .left-header span.en {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .login-content {
+            max-width: 360px;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-light);
+            background: #f8fafc;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+        }
+
+            .input::placeholder {
+                color: #c0c7d3;
+            }
+
+            .input:focus {
+                border-color: var(--primary);
+                background: #ffffff;
+                box-shadow: 0 0 0 1px rgba(0, 185, 243, 0.15);
+            }
+
+        .password-toggle {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: var(--muted);
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            display: inline-block;
+            margin-top: 8px;
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+            .forgot-link:hover {
+                text-decoration: underline;
+            }
+
+        .form-footer {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-top: 20px;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+            .checkbox input {
+                width: 0;
+                height: 0;
+                opacity: 0;
+                position: absolute;
+            }
+
+        .checkbox-box {
+            width: 18px;
+            height: 18px;
+            border-radius: 3px;
+            border: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .checkbox-check {
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 2px;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: opacity 0.15s, transform 0.15s;
+        }
+
+        .checkbox input:checked + .checkbox-box .checkbox-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 14px 16px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.05s;
+        }
+
+            .login-button:hover {
+                background: var(--primary-dark);
+                box-shadow: 0 10px 20px rgba(0, 185, 243, 0.35);
+            }
+
+            .login-button:active {
+                transform: translateY(1px);
+                box-shadow: 0 6px 14px rgba(0, 185, 243, 0.3);
+            }
+
+        .left-bottom-placeholder {
+            height: 40px;
+        }
+
+        .right-panel {
+            flex: 0 0 55%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            opacity: 0.92;
+            justify-content: center;
+            padding: 60px 80px;
+            background: var(--Color, #00ADDA);
+            color: #ffffff;
+        }
+
+        .right-overlay {
+            position: absolute;
+            inset: 0;
+            background-image: url("/Images/Login-bcg.png");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.14;
+        }
+
+        .right-gradient {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 60%);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+        }
+
+        .right-content {
+            position: relative;
+            max-width: 420px;
+            margin-left: 80px; /* hero now on the left, so spacing to the right side */
+        }
+
+        .logo-badge {
+            width: 115px;
+            height: 90px;
+            margin-bottom: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 26px;
+            border-radius: 24px;
+            border: 1px solid #FFF;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: rgba(255, 255, 255, 0.00);
+        }
+
+            .logo-badge span {
+                border-radius: 22px;
+                padding: 4px 16px;
+                border: 2px solid rgba(255, 255, 255, 0.65);
+            }
+
+        .right-title {
+            /* font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 16px; */
+            color: #FFF;
+            text-align: right;
+            font-family: 'LoewArabic';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 66px; /* 275% */
+        }
+
+        .right-text {
+            color: var(--rgb-255255255, #FFF);
+            font-family: 'LoewArabic';
+            font-size: 12px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 66px;
+        }
+
+            .right-text span {
+                display: block;
+                margin-top: 6px;
+                color: #FFF;
+                text-align: right;
+                font-family: 'LoewArabic';
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 24px; /* 171.429% */
+            }
+
+        .right-footer {
+            position: absolute;
+            inset-inline: 60px;
+            bottom: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .social {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-link {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: background 0.2s, color 0.2s;
+        }
+
+            .social-link:hover {
+                background: #ffffff;
+                color: var(--primary-dark);
+            }
+
+        media (max-width: 992px) {
+            .card {
+                flex-direction: column; /* on mobile hero on top, form below */
+            }
+
+            .right-panel {
+                flex: none;
+                min-height: 260px;
+                padding: 40px 32px 32px;
+            }
+
+            .right-content {
+                margin-left: 0;
+                max-width: none;
+            }
+
+            .right-footer {
+                inset-inline: 32px;
+                bottom: 24px;
+            }
+
+            .left-panel {
+                flex: none;
+                padding: 32px 24px 40px;
+            }
+
+            .login-content {
+                max-width: none;
+            }
+        }
+
+        media (max-width: 640px) {
+            .page {
+                padding: 12px;
+            }
+
+            .card {
+                border-radius: 0;
+            }
+
+            .left-header {
+                margin-bottom: 24px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
+
+            .right-panel {
+                min-height: 220px;
+            }
+
+            .right-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="card">
+            <!-- login (form) is visually on the RIGHT -->
+            <div class="left-panel">
+                <div>
+                    <div class="left-header">
+                        <div class="language-switch">
+                            <div class="language-icon">ع</div>
+                            <span class="en">EN</span>
+                        </div>
+                    </div>
+
+                    <div class="login-content">
+                        <h1 class="login-title">تسجيل الدخول</h1>
+                        <p class="login-subtitle">سجل دخولك إلى حسابك بإدخال المعلومات أدناه</p>
+
+                        <form asp-action="Login" method="post">
+                            <div class="form-group">
+                                <label class="form-label" for="username">اسم المستخدم</label>
+                                <div class="input-wrapper">
+                                    <input id="username" asp-for="Username" class="input" type="text" placeholder="اسم المستخدم" />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="password">كلمة المرور</label>
+                                <div class="input-wrapper">
+                                    <input id="password" asp-for="Password" class="input" type="password" placeholder="********" />
+                                    <span class="password-toggle">👁</span>
+                                </div>
+                                <a href="#" class="forgot-link">هل نسيت كلمة المرور ؟</a>
+                            </div>
+
+                            <div class="form-footer">
+                                <label class="checkbox">
+                                    <input type="checkbox" checked />
+                                    <span class="checkbox-box">
+                                        <span class="checkbox-check"></span>
+                                    </span>
+                                    <span>تذكرني</span>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="login-button">تسجيل الدخول</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="left-bottom-placeholder"></div>
+            </div>
+
+            <!-- hero (blue) is visually on the LEFT now -->
+            <div class="right-panel">
+                <div class="right-overlay"></div>
+                <div class="right-gradient"></div>
+
+                <div class="right-content">
+                    <div class="logo-badge">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="101" height="33" viewBox="0 0 101 33" fill="none">
+                            <path d="M20.7351 0.973434C20.7351 0.435822 20.2993 0 19.7619 0H18.5035C10.8715 0 4.68459 6.18689 4.68459 13.8189V15.7623H0.973434C0.435822 15.7623 0 16.1981 0 16.7355V19.2528C0 19.7904 0.435822 20.226 0.973434 20.226H4.68459V31.5813C4.68459 32.1188 5.12042 32.5546 5.65782 32.5546H8.17508C8.71269 32.5546 9.14832 32.1188 9.14832 31.5813V20.226H17.0608C17.5984 20.226 18.034 19.7904 18.034 19.2528V16.7355C18.034 16.1981 17.5984 15.7623 17.0608 15.7623H9.14832V13.8187C9.14832 8.65224 13.3366 4.46393 18.5033 4.46393H19.7619C20.2993 4.46393 20.7351 4.02809 20.7351 3.49049V0.973434Z" fill="white" />
+                            <path d="M87.5774 6.67773C80.6364 6.67773 74.9896 12.5821 74.9896 19.8393C74.9896 27.0963 80.6364 33.0004 87.5774 33.0004C94.5184 33.0004 100.165 27.0963 100.165 19.8393C100.165 12.5821 94.5184 6.67773 87.5774 6.67773ZM87.5774 28.5367C83.0977 28.5367 79.4533 24.635 79.4533 19.8393C79.4533 15.0434 83.0977 11.1417 87.5774 11.1417C92.0569 11.1417 95.7015 15.0434 95.7015 19.8393C95.7015 24.635 92.0569 28.5367 87.5774 28.5367Z" fill="white" />
+                            <path d="M33.2847 6.67773C26.3436 6.67773 20.6968 12.5821 20.6968 19.8393C20.6968 27.0963 26.3436 33.0004 33.2847 33.0004C40.2256 33.0004 45.8724 27.0963 45.8724 19.8393C45.8724 12.5821 40.2256 6.67773 33.2847 6.67773ZM33.2847 28.5367C28.8051 28.5367 25.1605 24.635 25.1605 19.8393C25.1605 15.0434 28.8051 11.1417 33.2847 11.1417C37.7643 11.1417 41.4087 15.0434 41.4087 19.8393C41.4087 24.635 37.7643 28.5367 33.2847 28.5367Z" fill="white" />
+                            <path d="M71.3563 0H68.839C68.3014 0 67.8656 0.435822 67.8656 0.973434V6.67747H61.9468C54.7977 6.67747 48.7623 12.2744 48.5391 19.4199C48.3036 26.9633 54.4528 33.1582 61.9808 32.9971C67.7522 32.8738 72.3295 28.0728 72.3295 22.2999V0.973434C72.3295 0.435822 71.8937 0 71.3563 0ZM67.8656 22.3648C67.8656 25.7678 65.0974 28.5365 61.694 28.5365C56.8982 28.5365 52.9964 24.6348 52.9964 19.8388C52.9964 15.0431 56.8982 11.1414 61.694 11.1414H67.8656V22.3648Z" fill="white" />
+                        </svg>
+                    </div>
+
+                    <h2 class="right-title">مرحباً بعودتك في فودو</h2>
+
+                    <p class="right-text">
+                        برنامج متكامل لإدارة كافة الأنشطة من المبيعات، المخزون، الحسابات وخطط الإنتاج
+                        <span>تابع كل التقارير والحسابات الخاصة بك من أي مكان في أي وقت على أي جهاز</span>
+                    </p>
+                </div>
+
+                <div class="right-footer">
+                    <div class="social">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">t</a>
+                        <a href="#" class="social-link">▶</a>
+                        <a href="#" class="social-link">in</a>
+                    </div>
+                    <div>
+                        <div>Company# 240042</div>
+                        <div>V 231231.03</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+</html>
+
+@* <!doctype html>
+<html lang="ar" dir="ltr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+
+<body>
+    <main class="page">
+        <!-- LEFT: form -->
+        <section class="left" aria-label="Login form">
+            <button class="lang" type="button" aria-label="Switch language">
+                <span class="lang__icon" aria-hidden="true"></span>
+                <span class="lang__txt">EN</span>
+            </button>
+
+            <div class="formWrap">
+                <h1 class="title">تسجيل الدخول</h1>
+                <p class="subtitle">سجل دخول الي حسابك بإدخال المعلومات أدناه</p>
+
+                <form class="form" action="#" method="post">
+                    <label class="label" for="username">اسم المستخدم</label>
+                    <div class="field">
+                        <input id="username"
+                               name="username"
+                               class="input"
+                               type="text"
+                               placeholder="اسم المستخدم"
+                               autocomplete="username"
+                               required />
+                    </div>
+
+                    <label class="label" for="password">كلمة المرور</label>
+                    <div class="field">
+                        <input id="password"
+                               name="password"
+                               class="input"
+                               type="password"
+                               placeholder="**********"
+                               autocomplete="current-password"
+                               required />
+                        <button class="eye" type="button" aria-label="Show password">👁</button>
+                    </div>
+
+                    <div class="row">
+                        <label class="remember">
+                            <input class="checkbox" type="checkbox" checked />
+                            <span class="remember__txt">تذكرني</span>
+                        </label>
+
+                        <a class="forgot" href="#">هل نسيت كلمة المرور ؟</a>
+                    </div>
+
+                    <button class="btn" type="submit">تسجيل الدخول</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- RIGHT: hero -->
+        <aside class="right" aria-label="Welcome panel">
+            <div class="hero">
+                <!-- Replace with your exported Figma image if needed -->
+                <img class="hero__img"
+                     src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=1400&q=80"
+                     alt="" />
+                <div class="hero__overlay" aria-hidden="true"></div>
+
+                <div class="hero__content">
+                    <div class="logoBox" aria-hidden="true">
+                        <div class="logoMark"></div>
+                    </div>
+
+                    <h2 class="hero__title">مرحبًا بعودتك في فودو</h2>
+
+                    <p class="hero__line">
+                        <span class="hero__lead">ب</span>
+                        <span>رنامج متكامل لإدارة كافة الأنشطة من المبيعات، المخزون، الحسابات وخطط الإنتاج</span>
+                    </p>
+
+                    <div class="hero__line hero__line--spaced">
+                        <span class="hero__lead">ت</span>
+                        <span>ابع كل التقارير والحسابات الخاصة بك من اي مكان في اي وقت علي اي جهاز</span>
+                    </div>
+
+                    <div class="hero__footer">
+                        <div class="social" aria-label="Social links">
+                            <a class="social__dot" href="#" aria-label="Facebook"></a>
+                            <a class="social__dot" href="#" aria-label="Instagram"></a>
+                            <a class="social__dot" href="#" aria-label="X"></a>
+                            <a class="social__dot" href="#" aria-label="LinkedIn"></a>
+                            <a class="social__dot" href="#" aria-label="YouTube"></a>
+                        </div>
+
+                        <div class="meta">
+                            <span class="meta__item">Company# 240042</span>
+                            <span class="meta__sep" aria-hidden="true"></span>
+                            <span class="meta__item">V 231231.03</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+</body>
+</html> *@

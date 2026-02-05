@@ -12,6 +12,7 @@ namespace Fodo.Contracts.DTOS
         public string? FullNameAr { get; set; }
         public Guid RoleId { get; set; }
         public bool IsActive { get; set; }
+        public int ClientId { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

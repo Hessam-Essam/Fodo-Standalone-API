@@ -24,7 +24,7 @@ namespace Fodo.Domain.Entities
 
         [ForeignKey(nameof(Clients))]
         [Column("client_id")]
-        public int? ClientId { get; set; }
+        public int ClientId { get; set; }
 
         public Clients Clients { get; set; }
         public ICollection<UserBranches> UserBranches { get; set; }

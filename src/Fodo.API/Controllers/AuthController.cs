@@ -1,4 +1,6 @@
-﻿using Fodo.Application.Implementation.Interfaces;
+﻿using Fodo.API.Responses;
+using Fodo.Application.Features.Login;
+using Fodo.Application.Implementation.Interfaces;
 using Fodo.Contracts.Requests;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +28,17 @@ namespace Fodo.API.Controllers
             }
 
             return Ok(result);
+        }
+
+        [HttpPost("LoginPortal")]
+        public async Task<IActionResult> LoginPortal([FromBody] LoginByPasswordRequest request)
+        {
+            var result = await _authService.LoginAsync(request);
+
+            if (!result.Success)
+                return BadRequest(new ApiResponse<LoginResponse>(400, result));
+
+            return Ok(new ApiResponse<LoginResponse>(200, result));
         }
     }
 

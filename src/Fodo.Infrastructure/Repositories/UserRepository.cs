@@ -16,6 +16,9 @@ namespace Fodo.Infrastructure.Repositories
                 .Where(u => u.IsActive)
                 .ToListAsync();
         }
+
+        public Task<User> GetByNormalizedUsernameAsync(string normalizedUsername)
+        => _db.Users.FirstOrDefaultAsync(x => x.NormalizedUserName == normalizedUsername);
     }
 
 }

@@ -9,6 +9,7 @@ namespace Fodo.Application.Implementation.Interfaces
     public interface IAuthService
     {
         Task<LoginResponse> LoginAsync(LoginByPasswordRequest request);
+        Task<LoginResponse> LoginPortalAsync(LoginByPasswordRequest request);
     }
 
 }

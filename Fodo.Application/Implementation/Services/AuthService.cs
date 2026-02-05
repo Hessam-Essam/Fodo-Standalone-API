@@ -5,6 +5,7 @@ using Fodo.Application.Implementation.IRepositories;
 using Fodo.Contracts.DTOS;
 using Fodo.Contracts.Requests;
 using Fodo.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,13 +17,15 @@ namespace Fodo.Application.Implementation.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly IPasswordService _passwordService;
+        private readonly IPasswordHasher<User> _hasher;
         private readonly ITokenService _tokenService;
 
-        public AuthService(IUserRepository userRepo, IPasswordService passwordService, ITokenService tokenService)
+        public AuthService(IUserRepository userRepo, IPasswordService passwordService, IPasswordHasher<User> hasher, ITokenService tokenService)
         {
             _userRepo = userRepo;
             _passwordService = passwordService;
             _tokenService = tokenService;
+            _hasher = hasher;
         }
 
         public async Task<LoginResponse> LoginAsync(LoginByPasswordRequest request)
@@ -71,6 +74,42 @@ namespace Fodo.Application.Implementation.Services
                     FullNameAr = matchedUser.FullNameAr,
                     RoleId = matchedUser.RoleId,
                     IsActive = matchedUser.IsActive
+                }
+            };
+        }
+
+        public async Task<LoginResponse> LoginPortalAsync(LoginByPasswordRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request?.Username) || string.IsNullOrWhiteSpace(request?.Password))
+                return new LoginResponse { Success = false, Message = "Username and password are required." };
+
+            var normalized = request.Username.Trim().ToUpperInvariant();
+            var user = await _userRepo.GetByNormalizedUsernameAsync(normalized);
+
+            if (user == null)
+                return new LoginResponse { Success = false, Message = "Invalid username or password." };
+
+            if (!user.IsActive)
+                return new LoginResponse { Success = false, Message = "User is inactive." };
+
+            var verifyResult = _hasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
+
+            if (verifyResult == PasswordVerificationResult.Failed)
+                return new LoginResponse { Success = false, Message = "Invalid username or password." };
+
+            return new LoginResponse
+            {
+                Success = true,
+                Message = "Login successful.",
+                User = new UserDto
+                {
+                    UserId = user.UserId,
+                    Username = user.UserName,
+                    FullNameEn = user.FullNameEn,
+                    FullNameAr = user.FullNameAr,
+                    RoleId = user.RoleId,
+                    IsActive = user.IsActive,
+                    ClientId = user.ClientId
                 }
             };
         }
