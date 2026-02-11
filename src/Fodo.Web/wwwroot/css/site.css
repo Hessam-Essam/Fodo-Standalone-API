@@ -67,8 +67,7 @@ body {
 /* page content */
 .page {
     /*min-height: 100vh;*/
-    padding: 24px;
-    padding-right: calc(var(--rail-w) + 24px);
+    /*padding-right: calc(var(--rail-w) + 24px);*/
     background: #F9F9F9;
     transition: padding-right .28s ease;
 }
@@ -303,6 +302,48 @@ body {
     transform: rotate(-45deg);
 }
 
-svg {
+/*svg {
     padding: 0px 0 0 15px;
+}*/
+.topbar {
+    height: 41px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 26px;
+    border-bottom: 1px solid var(--border);
+    direction: ltr;
+    border-radius: 5px;
+}
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-main);
+    text-decoration: none;
+    font-weight: 600;
+    direction: ltr;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-image: url("https://i.pravatar.cc/64?img=11");
+    background-size: cover;
 }

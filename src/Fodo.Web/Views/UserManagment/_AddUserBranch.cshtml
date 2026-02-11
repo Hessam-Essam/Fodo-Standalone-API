@@ -1,0 +1,615 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch Popup ReadOnly</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00b9f3;
+            --primary-dark: #00a1d3;
+            --danger: #d92d20;
+            --text-main: #111827;
+            --border: #e4e9f2;
+            --header-bg: #e6f9ff;
+            --row-hover: #f9fafb;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+        }
+
+        /* Modal Base */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 12px;
+            width: 600px;
+            max-width: 95%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 10px;
+        }
+
+        /* Search Box */
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 97%;
+            padding: 5px 12px 10px 0px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* DataGrid Table Styles */
+        .datagrid-container {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+            max-height: 300px; /* Optional: Scrollable if many rows */
+            overflow-y: auto;
+        }
+
+        .datagrid {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+            .datagrid th {
+                background-color: var(--header-bg);
+                padding: 12px 16px;
+                text-align: right;
+                font-weight: 700;
+                color: var(--text-main);
+                border-bottom: 1px solid var(--border);
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+
+            .datagrid td {
+                padding: 12px 16px;
+                border-bottom: 1px solid var(--border);
+                background-color: #fff;
+                color: #374151;
+            }
+
+            .datagrid tr:hover td {
+                background-color: var(--row-hover);
+            }
+
+            .datagrid tr:last-child td {
+                border-bottom: none;
+            }
+
+        /* Column Widths */
+        .col-check {
+            width: 50px;
+            text-align: center;
+        }
+
+        .col-name {
+            width: 40%;
+        }
+
+        .col-address {
+            width: auto;
+        }
+
+        /* Custom Checkbox */
+        .custom-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        .modal-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 8px 48px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-save {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: var(--danger);
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Modal Structure -->
+    <div id="branchModal" class="modal-overlay">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">الفروع</h3>
+            </div>
+
+            <!-- Search -->
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="اسم الفرع">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <!-- DataGrid (Read Only) -->
+            <div class="datagrid-container">
+                <table class="datagrid">
+                    <thead>
+                        <tr>
+                            <th class="col-check">
+                                <input type="checkbox" class="custom-checkbox" onchange="toggleAll(this)">
+                            </th>
+                            <th class="col-name">اسم الفرع</th>
+                            <th class="col-address">عنوان الفرع</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="col-check"><input type="checkbox" class="custom-checkbox"></td>
+                            <td>الفرع الرئيسي</td>
+                            <td>القاهرة - وسط البلد - شارع 15</td>
+                        </tr>
+                        <tr>
+                            <td class="col-check"><input type="checkbox" class="custom-checkbox"></td>
+                            <td>فرع المعادي</td>
+                            <td>المعادي - شارع 9</td>
+                        </tr>
+                        <tr>
+                            <td class="col-check"><input type="checkbox" class="custom-checkbox"></td>
+                            <td>فرع الاسكندرية</td>
+                            <td>سموحة - ميدان فيكتور عمانويل</td>
+                        </tr>
+                        <tr>
+                            <td class="col-check"><input type="checkbox" class="custom-checkbox"></td>
+                            <td>فرع الجيزة</td>
+                            <td>الدقي - شارع التحرير</td>
+                        </tr>
+                        <tr>
+                            <td class="col-check"><input type="checkbox" class="custom-checkbox"></td>
+                            <td>فرع مدينة نصر</td>
+                            <td>عباس العقاد - بجوار الحديقة الدولية</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-save" onclick="saveData()">حفظ</button>
+                <button class="btn btn-cancel" onclick="closeModal()">الغاء</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function saveData() {
+            // Logic to collect selected IDs
+            let selected = [];
+            document.querySelectorAll('.datagrid tbody .custom-checkbox:checked').forEach(chk => {
+                // Assuming you might add data-id attributes to rows later
+                let row = chk.closest('tr');
+                let name = row.cells[1].innerText;
+                selected.push(name);
+            });
+
+            alert('تم حفظ الفروع: ' + (selected.length > 0 ? selected.join(', ') : 'لا يوجد'));
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('branchModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
+@* <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Branch Popup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles matching your theme */
+        :root {
+            --primary: #00b9f3;
+            --primary-dark: #00a1d3;
+            --danger: #d92d20;
+            --danger-hover: #b9251b;
+            --text-main: #111827;
+            --border: #e4e9f2;
+            --bg-header: #e6f9ff;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* --- 1. The Modal Overlay (Background) --- */
+        .modal-overlay {
+            display: none; /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- 2. The Modal Content (The White Card) --- */
+        .modal-content {
+            background-color: #fff;
+            border-radius: 12px;
+            width: 500px;
+            max-width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 24px 30px;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        
+
+        /* Header Title */
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary); /* Blue underline */
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Search Input */
+        .search-container {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 40px; /* Space for icon on left */
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Table/List Structure */
+        .list-header {
+            background-color: var(--bg-header);
+            border-radius: 6px;
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .list-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .col-checkbox {
+            width: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .col-text {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            padding: 0 10px;
+        }
+
+        .col-input {
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            border: 2px solid var(--primary); /* Blue border for checked state look */
+            background-color: var(--primary);
+            appearance: none;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .custom-checkbox:checked::after {
+                content: '✔';
+                color: white;
+                font-size: 14px;
+                position: absolute;
+            }
+
+            /* Unchecked style (border only) */
+            .custom-checkbox:not(:checked) {
+                background-color: transparent;
+                border: 2px solid #d1d5db;
+            }
+
+            .custom-checkbox:checked {
+                background-color: var(--primary);
+                border-color: var(--primary);
+            }
+
+        /* Input boxes in rows */
+        .row-input-box {
+            width: 100%;
+            height: 38px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
+        /* Footer Buttons */
+        .modal-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 8px 40px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+            .btn:hover {
+                opacity: 0.9;
+            }
+
+        .btn-save {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        /* Trigger Button Style (For Demo) */
+        .trigger-btn {
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!--
+        1. THE TRIGGER BUTTON
+        In your MVC View, this would be your "Add" button.
+    -->
+    <button class="trigger-btn" onclick="openModal()">اضافة +</button>
+
+
+    <!--
+        2. THE MODAL HTML
+        Place this at the bottom of your MVC View or inside a Partial View.
+    -->
+    <div id="branchModal" class="modal-overlay">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h2 class="modal-title">الفروع</h2>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="اسم الفرع">
+                <!-- Search Icon SVG -->
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <!-- Header Row -->
+            <div class="list-header">
+                <div class="col-checkbox">
+                    <input type="checkbox" class="custom-checkbox" checked>
+                </div>
+                <div class="col-text" style="text-align: right;">الفرع</div>
+                <div class="col-text" style="text-align: right;">عنوان الفرع</div>
+            </div>
+
+            <!-- List Rows -->
+            <div class="list-body">
+                <!-- Row 1 -->
+                <div class="list-row">
+                    <div class="col-checkbox">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="list-row">
+                    <div class="col-checkbox">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="list-row">
+                    <div class="col-checkbox">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                    <div class="col-input">
+                        <input type="text" class="row-input-box">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-save" onclick="saveData()">حفظ</button>
+                <button class="btn btn-cancel" onclick="closeModal()">الغاء</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!--
+        3. JAVASCRIPT LOGIC
+        Add this to your scripts section in the MVC View.
+    -->
+    <script>
+        // Function to open the modal
+        function openModal() {
+            document.getElementById('branchModal').style.display = 'flex';
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('branchModal').style.display = 'none';
+        }
+
+        // Function to handle save (Placeholder for MVC Logic)
+        function saveData() {
+            // Add your AJAX call or form submission logic here
+            alert('تم الحفظ بنجاح');
+            closeModal();
+        }
+
+        // Close modal when clicking outside the content
+        window.onclick = function(event) {
+            var modal = document.getElementById('branchModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+
+</body>
+</html> *@

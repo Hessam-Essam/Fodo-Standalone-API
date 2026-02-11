@@ -2,7 +2,7 @@
 
 namespace Fodo.Web.Controllers
 {
-    public class UserManagmentController : Controller
+    public class BranchesController : Controller
     {
         public IActionResult Index()
         {

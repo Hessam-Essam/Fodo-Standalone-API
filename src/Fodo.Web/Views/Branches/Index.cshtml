@@ -1,0 +1,587 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <title>اضافة فرع</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            --primary: #00b9f3;
+            --primary-dark: #00a1d3;
+            --danger: #d92d20;
+            --bg-main: #f9fbfd;
+            --card-bg: #ffffff;
+            --border: #e4e9f2;
+            --border-error: #f04438;
+            --text-main: #111827;
+            --muted: #6b7280;
+            --table-header-bg: #e5f9ff;
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --danger-bg: #fee2e2;
+            --danger-text: #991b1b;
+        }
+
+        /* * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        } */
+
+        /* body {
+            font-family: "Cairo", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg-main);
+            direction: rtl;
+            color: var(--text-main);
+        } */
+
+        /* Main Container (No sidebar) */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            /* flex-direction: column; */
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            /* padding: 24px 40px 60px; */
+            max-width: 1300px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+            .breadcrumb span.active {
+                color: var(--primary);
+                font-weight: 600;
+            }
+
+        /* Section Styles */
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-toggle {
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 24px 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+        }
+
+        /* Form Layout */
+        .form-header-row {
+            display: flex;
+            justify-content: flex-end; /* Align active checkbox to left (RTL end is left? No RTL start is right, end is left) */
+            /* Actually in RTL: flex-start is Right, flex-end is Left. The image shows checkbox on Left. */
+            justify-content: flex-end;
+            margin-bottom: 24px;
+        }
+
+        .active-checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .custom-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-input {
+            height: 34px;
+            padding: 0 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            color: var(--text-main);
+            background: #fff;
+            width: 373px;
+        }
+
+            .form-input:focus {
+                border-color: var(--primary);
+            }
+
+            .form-input.disabled {
+                background: #f3f4f6;
+                color: var(--muted);
+            }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-star {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--danger);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Tables & Accordions */
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+
+        .accordion-title {
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 6px 20px;
+            font-family: inherit;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .table-container {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+            .data-table th {
+                background: var(--table-header-bg);
+                padding: 12px 24px;
+                font-weight: 600;
+                font-size: 13px;
+                text-align: right;
+                color: var(--text-main);
+            }
+
+            .data-table td {
+                padding: 14px 24px;
+                border-bottom: 1px solid var(--border);
+                font-size: 13px;
+                color: var(--text-main);
+                vertical-align: middle;
+            }
+
+            .data-table tr:last-child td {
+                border-bottom: none;
+            }
+
+        /* Badges & Buttons in table */
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-inactive {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+        }
+
+        .badge-active {
+            background: #e0f2f1; /* Light teal */
+            color: #00695c;
+        }
+
+        .btn-activate {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 16px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        /* Pagination */
+        .pagination-container {
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-top: 1px solid var(--border);
+            direction: ltr; /* Pagination is usually LTR even in RTL layouts */
+        }
+
+        .pagination-btn {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+            .pagination-btn.active {
+                background: var(--primary);
+                color: #fff;
+                border-color: var(--primary);
+            }
+
+        .pagination-dots {
+            color: var(--muted);
+            font-size: 12px;
+            margin: 0 4px;
+        }
+
+        /* Footer Buttons */
+        .actions-footer {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 56px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-cancel {
+            background: var(--danger);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 56px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* Empty state styling for empty tables */
+        .empty-row {
+            height: 40px;
+        }
+
+        /* Chevron icon util */
+        .chevron {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-right: 2px solid var(--text-main);
+            border-bottom: 2px solid var(--text-main);
+            transform: rotate(45deg);
+            margin-right: 8px;
+        }
+
+        /* Utility Grid Positioning */
+        .grid-col-1 {
+            grid-column: 2;
+        }
+
+        .grid-col-2 {
+            grid-column: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+
+        <main class="content">
+            <!-- Breadcrumb -->
+            <div class="page-header">
+                <div class="breadcrumb">
+                    الفروع - <span class="active">اضافة الفروع</span>
+                </div>
+            </div>
+
+            <!-- Section: Basic Data -->
+            <h3 class="section-title">البيانات الاساسية</h3>
+            <div class="card">
+                <div class="form-header-row">
+                    <div class="active-checkbox-wrapper">
+                        <span>نشط</span>
+                        <div class="custom-checkbox">✔</div>
+                    </div>
+                </div>
+
+                <form class="form-grid">
+                    <!-- Code (Right Column) -->
+                    <div class="form-group grid-col-2">
+                        <input type="text" class="form-input disabled" placeholder="الكود" disabled />
+                    </div>
+
+                    <!-- Arabic Name (Right Column) -->
+                    <div class="form-group grid-col-2">
+                        <div class="input-with-icon">
+                            <span class="input-star">*</span>
+                            <input type="text" class="form-input error-border has-star" placeholder="الاسم بالعربي" />
+                        </div>
+                    </div>
+
+                    <!-- English Name (Left Column) -->
+                    <div class="form-group grid-col-1">
+                        <div class="input-with-icon">
+                            <span class="input-star">*</span>
+                            <input type="text" class="form-input error-border has-star" placeholder="الاسم بالانجليزي" />
+                        </div>
+                    </div>
+
+                    <!-- Phone (Right Column) -->
+                    <div class="form-group grid-col-2">
+                        <input type="text" class="form-input" placeholder="رقم التليفون" />
+                    </div>
+
+                    <!-- Address (Full Width) -->
+                    <div class="form-group full-width">
+                        <input type="text" class="form-input" placeholder="العنوان" />
+                    </div>
+                </form>
+            </div>
+
+            <!-- Section: Machines -->
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    ماكينات الفرع
+                    <span class="chevron"></span>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>اسم الجهاز</th>
+                            <th>رقم الجهاز</th>
+                            <th>تاريخ اخر تسجيل دخول</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Android SDK Built For X86</td>
+                            <td>b99d4eda8478d262</td>
+                            <td>25/12/2015</td>
+                            <td>
+                                <span class="badge badge-inactive">غير نشطة</span>
+                                <button class="btn-activate" style="margin-right:8px;">تنشيط</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Android SDK Built For X86</td>
+                            <td>b99d4eda8478d262</td>
+                            <td>25/12/2015</td>
+                            <td>
+                                <span class="badge badge-active">نشطة</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="pagination-container">
+                    <div class="pagination-btn">»</div>
+                    <div class="pagination-btn">›</div>
+                    <div class="pagination-btn active">1</div>
+                    <div class="pagination-btn">2</div>
+                    <div class="pagination-btn">3</div>
+                    <div class="pagination-dots">......</div>
+                    <div class="pagination-btn">10</div>
+                    <div class="pagination-btn">‹</div>
+                    <div class="pagination-btn">«</div>
+                </div>
+            </div>
+
+            <!-- Section: Users -->
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    المستخدمين التابعين للفرع
+                    <span class="chevron"></span>
+                </div>
+                <button class="trigger-btn btn-add" onclick="openModal()">اضافة</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 50%;">الاسم</th>
+                            <th style="width: 50%;">الصلاحية</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="empty-row"><td colspan="2"></td></tr>
+                        <tr class="empty-row"><td colspan="2"></td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination-container">
+                    <div class="pagination-btn">»</div>
+                    <div class="pagination-btn">›</div>
+                    <div class="pagination-btn active">1</div>
+                    <div class="pagination-btn">2</div>
+                    <div class="pagination-btn">3</div>
+                    <div class="pagination-dots">......</div>
+                    <div class="pagination-btn">10</div>
+                    <div class="pagination-btn">‹</div>
+                    <div class="pagination-btn">«</div>
+                </div>
+            </div>
+
+            <!-- Section: Sales Sections -->
+            <div class="accordion-header">
+                <div class="accordion-title">
+                    اقسام قائمة البيع
+                    <span class="chevron"></span>
+                </div>
+                <button class="btn-add trigger-btn" onclick="openModalSales()">اضافة</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>الاسم</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="empty-row"><td></td></tr>
+                        <tr class="empty-row"><td></td></tr>
+                    </tbody>
+                </table>
+                <div class="pagination-container">
+                    <div class="pagination-btn">»</div>
+                    <div class="pagination-btn">›</div>
+                    <div class="pagination-btn active">1</div>
+                    <div class="pagination-btn">2</div>
+                    <div class="pagination-btn">3</div>
+                    <div class="pagination-dots">......</div>
+                    <div class="pagination-btn">10</div>
+                    <div class="pagination-btn">‹</div>
+                    <div class="pagination-btn">«</div>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="actions-footer">
+                <button class="btn-save">حفظ</button>
+                <button class="btn-cancel">الغاء</button>
+            </div>
+
+        </main>
+    </div>
+    <script>
+        function openModal() {
+            document.getElementById('usersModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('usersModal').style.display = 'none';
+        }
+        function toggleAll(source) {
+            const checkboxes = document.querySelectorAll('.custom-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = source.checked;
+            });
+        }
+
+        function openModalSales() {
+            document.getElementById('sectionsModal').style.display = 'flex';
+        }
+
+        function closeModalSales() {
+            document.getElementById('sectionsModal').style.display = 'none';
+        }
+
+        function saveData() {
+            alert('تم الحفظ');
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('sectionsModal')) {
+                closeModal();
+            }
+        }
+    </script>
+    @Html.Partial("_AddBranchUsers")
+    @Html.Partial("_AddSalesDepartment")
+</body>
+</html>

@@ -57,56 +57,19 @@
             flex-direction: column;
         }
 
-        /* Topbar */
-        .topbar {
-            height: 41px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 26px;
-            border-bottom: 1px solid var(--border);
-            direction: ltr;
-            border-radius: 5px;
-        }
+       
 
-        .back-link {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 14px;
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 600;
-            direction: ltr;
-        }
+        
 
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        
 
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-image: url("https://i.pravatar.cc/64?img=11");
-            background-size: cover;
-        }
+        
 
         /* Page Content */
         .content {
             box-sizing: border-box;
-            padding: 20px 30px 40px;
-            max-width: 1200px;
+            /* padding: 20px 30px 40px; */
+            max-width: 1300px;
             width: 100%;
             margin: 0 auto;
         }
@@ -205,18 +168,27 @@
             background: #fff;
             width: 373px;
             border-radius: 5px;
+
+        }
+        .trigger-btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
         }
 
-            .form-input::placeholder {
-                color: var(--muted);
-                opacity: 0.7;
-            }
+        .form-input::placeholder {
+            color: var(--muted);
+            opacity: 0.7;
+        }
 
-            .form-input.disabled {
-                background: #f3f4f6;
-                border-color: var(--border);
-                color: var(--muted);
-            }
+        .form-input.disabled {
+            background: #f3f4f6;
+            border-color: var(--border);
+            color: var(--muted);
+        }
 
         .input-with-icon {
             position: relative;
@@ -284,6 +256,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            direction: ltr; /* Pagination is usually left-to-right even in RTL layouts */
         }
 
         .pagination-btn {
@@ -361,17 +334,7 @@
         <!-- Main Content -->
         <main class="main">
             <!-- Topbar -->
-            <header class="topbar">
-                
-                <div class="topbar-right">
-                    <div class="user-info">
-                        <button style="border:none;background:none;cursor:pointer;">🔔</button>
-                        <span>EN</span>
-                        <div class="avatar"></div>
-                        <span>هشام ..</span>
-                    </div>
-                </div>
-            </header>
+            
 
             <div class="content">
                 <!-- Breadcrumb & Title -->
@@ -445,7 +408,8 @@
                 <!-- Section 2: Branches -->
                 <div class="branches-header">
                     <h3 class="section-title" style="margin:0;">الفروع</h3>
-                    <button class="btn-add">اضافة</button>
+                    <button class="trigger-btn btn-add" onclick="openModal()">اضافة</button>
+
                 </div>
 
                 <div class="branches-table-container">
@@ -477,5 +441,41 @@
             </div>
         </main>
     </div>
+    <script>
+        function openModal() {
+            document.getElementById('branchModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('branchModal').style.display = 'none';
+        }
+
+        function toggleAll(source) {
+            checkboxes = document.querySelectorAll('.datagrid tbody .custom-checkbox');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+        }
+        function saveData() {
+            // Logic to collect selected IDs
+            let selected = [];
+            document.querySelectorAll('.datagrid tbody .custom-checkbox:checked').forEach(chk => {
+                // Assuming you might add data-id attributes to rows later
+                let row = chk.closest('tr');
+                let name = row.cells[1].innerText;
+                selected.push(name);
+            });
+
+            alert('تم حفظ الفروع: ' + (selected.length > 0 ? selected.join(', ') : 'لا يوجد'));
+            closeModal();
+        }
+
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('branchModal')) {
+                closeModal();
+            }
+        }
+    </script>
+    @Html.Partial("_AddUserBranch")
 </body>
 </html>

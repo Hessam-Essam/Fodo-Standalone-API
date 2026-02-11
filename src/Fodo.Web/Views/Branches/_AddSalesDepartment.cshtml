@@ -1,0 +1,276 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Menu Sections Popup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00b9f3;
+            --primary-dark: #00a1d3;
+            --danger: #d92d20;
+            --text-main: #111827;
+            --border: #e4e9f2;
+            --header-bg: #e6f9ff;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+            padding: 20px;
+        }
+
+        /* Modal Base */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            border-radius: 12px;
+            width: 450px;
+            max-width: 95%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 24px 30px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Search Box */
+        .search-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 12px 10px 0px; /* Icon on left (end in RTL) */
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Sections List */
+        .sections-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .section-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+            .section-item.active {
+                background-color: var(--header-bg);
+            }
+
+        .section-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 14px;
+            outline: none;
+            background-color: #fff;
+        }
+
+        /* Custom Checkbox Container */
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background-color: #fff;
+            border: 1px solid var(--border); /* Light border initially */
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+            /* Checked State */
+            .custom-checkbox:checked {
+                background-color: var(--primary);
+                border-color: var(--primary);
+            }
+
+                /* Checkmark Icon */
+                .custom-checkbox:checked::after {
+                    content: '';
+                    position: absolute;
+                    width: 6px;
+                    height: 10px;
+                    border: solid white;
+                    border-width: 0 2px 2px 0;
+                    transform: rotate(45deg);
+                    margin-top: -2px;
+                }
+
+            /* Hover Effect */
+            .custom-checkbox:hover {
+                border-color: var(--primary);
+            }
+
+        /* Footer */
+        .modal-footer {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 8px 48px;
+            border-radius: 6px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-save {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-cancel {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .trigger-btn {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal Structure -->
+    <div id="sectionsModal" class="modal-overlay">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h3 class="modal-title">اقسام قائمة البيع</h3>
+            </div>
+
+            <!-- Search -->
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="اسم القسم">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+
+            <!-- List -->
+            <div class="sections-list">
+                <!-- Item 1 (Active/Selected look) -->
+                <div class="section-item active">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <input type="text" class="section-input">
+                </div>
+
+                <!-- Item 2 -->
+                <div class="section-item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <input type="text" class="section-input">
+                </div>
+
+                <!-- Item 3 -->
+                <div class="section-item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <input type="text" class="section-input">
+                </div>
+
+                <!-- Item 4 -->
+                <div class="section-item">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" class="custom-checkbox" checked>
+                    </div>
+                    <input type="text" class="section-input">
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-save" onclick="saveData()">حفظ</button>
+                <button class="btn btn-cancel" onclick="closeModalSales()">الغاء</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        
+    </script>
+</body>
+</html>
