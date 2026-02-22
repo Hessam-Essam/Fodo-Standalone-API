@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Fodo.Application.Features.Cash.CashIn
+namespace Fodo.Application.Features.Cash.CashIn.CreateCashIn
 {
     public sealed record CreateCashInResponse(
     bool Success,

@@ -10,5 +10,16 @@ namespace Fodo.Application.Implementation.IRepositories
         Task<Shifts?> GetShiftAsync(int shiftId, CancellationToken ct);
         Task AddAsync(CashInVoucher entity, CancellationToken ct);
         Task AddAsync(CashOutVoucher entity, CancellationToken ct);
+        Task<List<CashInVoucher>> GetAllByShiftAsync(
+        int branchId,
+        int shiftId,
+        string? deviceId,
+        CancellationToken ct);
+
+        Task<List<CashOutVoucher>> GetAllCashOutByShiftAsync(
+        int branchId,
+        int shiftId,
+        string? deviceId,
+        CancellationToken ct);
     }
 }

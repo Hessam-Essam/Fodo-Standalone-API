@@ -1,13 +1,11 @@
-﻿using Fodo.Application.Features.Cash.CashIn;
-using Fodo.Application.Features.Cash.CashOut;
+﻿using Fodo.Application.Features.Cash.CashIn.CreateCashIn;
+using Fodo.Application.Features.Cash.CashIn.GetAllCashIn;
+using Fodo.Application.Features.Cash.CashOut.CreateCashOut;
+using Fodo.Application.Features.Cash.CashOut.GetAllCashOut;
 using Fodo.Application.Implementation.Interfaces;
 using Fodo.Application.Implementation.IRepositories;
+using Fodo.Contracts.DTOS;
 using Fodo.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Fodo.Application.Implementation.Services
 {
@@ -170,6 +168,79 @@ namespace Fodo.Application.Implementation.Services
             }
 
             return new(true, "Cash-Out voucher created successfully.", entity.CashOutVoucherId, entity.RowGuid, entity.CreatedAt);
+        }
+
+        public async Task<GetAllCashInResponse> GetAllAsync(GetAllCashInRequest request, CancellationToken ct)
+        {
+            if (request is null)
+                return new(false, "Request body is required.", Array.Empty<CashInVoucherDto>());
+
+            if (request.BranchId <= 0)
+                return new(false, "BranchId is required.", Array.Empty<CashInVoucherDto>());
+
+            if (request.ShiftId <= 0)
+                return new(false, "ShiftId is required.", Array.Empty<CashInVoucherDto>());
+
+            var shift = await _repo.GetShiftAsync(request.ShiftId, ct);
+            if (shift is null)
+                return new(false, "Shift not found.", Array.Empty<CashInVoucherDto>());
+
+            if (shift.BranchId != request.BranchId)
+                return new(false, "Shift does not belong to this branch.", Array.Empty<CashInVoucherDto>());
+
+            var rows = await _repo.GetAllByShiftAsync(request.BranchId, request.ShiftId, request.DeviceId, ct);
+
+            var data = rows.Select(x => new CashInVoucherDto(
+                CashInVoucherId: x.CashInVoucherId,
+                BranchId: x.BranchId,
+                ShiftId: x.ShiftId,
+                UserId: x.UserId,
+                Amount: Math.Round(x.Amount, 2, MidpointRounding.AwayFromZero),
+                Reason: x.Reason,
+                CreatedAtUtc: x.CreatedAt,
+                DeviceId: x.DeviceId,
+                RowGuid: x.RowGuid,
+                IsSynced: x.IsSynced,
+                SyncedAtUtc: x.SyncedAt
+            )).ToList();
+
+            return new(true, "Cash-In vouchers loaded successfully.", data);
+        }
+        public async Task<GetAllCashOutResponse> GetAllAsync(GetAllCashOutRequest request, CancellationToken ct)
+        {
+            if (request is null)
+                return new(false, "Request body is required.", Array.Empty<CashOutVoucherDto>());
+
+            if (request.BranchId <= 0)
+                return new(false, "BranchId is required.", Array.Empty<CashOutVoucherDto>());
+
+            if (request.ShiftId <= 0)
+                return new(false, "ShiftId is required.", Array.Empty<CashOutVoucherDto>());
+
+            var shift = await _repo.GetShiftAsync(request.ShiftId, ct);
+            if (shift is null)
+                return new(false, "Shift not found.", Array.Empty<CashOutVoucherDto>());
+
+            if (shift.BranchId != request.BranchId)
+                return new(false, "Shift does not belong to this branch.", Array.Empty<CashOutVoucherDto>());
+
+            var rows = await _repo.GetAllCashOutByShiftAsync(request.BranchId, request.ShiftId, request.DeviceId, ct);
+
+            var data = rows.Select(x => new CashOutVoucherDto(
+                CashOutVoucherId: x.CashOutVoucherId,
+                BranchId: x.BranchId,
+                ShiftId: x.ShiftId,
+                UserId: x.UserId,
+                Amount: Math.Round(x.Amount, 2, MidpointRounding.AwayFromZero),
+                Reason: x.Reason,
+                CreatedAtUtc: x.CreatedAt,
+                DeviceId: x.DeviceId,
+                RowGuid: x.RowGuid,
+                IsSynced: x.IsSynced,
+                SyncedAtUtc: x.SyncedAt
+            )).ToList();
+
+            return new(true, "Cash-Out vouchers loaded successfully.", data);
         }
     }
 }

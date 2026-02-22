@@ -29,5 +29,41 @@ namespace Fodo.Infrastructure.Repositories
         {
             await _db.CashOutVouchers.AddAsync(entity, ct);
         }
+
+        public async Task<List<CashInVoucher>> GetAllByShiftAsync(
+        int branchId,
+        int shiftId,
+        string? deviceId,
+        CancellationToken ct)
+        {
+            var q = _db.CashInVouchers
+                .AsNoTracking()
+                .Where(x => x.BranchId == branchId && x.ShiftId == shiftId);
+
+            if (!string.IsNullOrWhiteSpace(deviceId))
+                q = q.Where(x => x.DeviceId == deviceId);
+
+            return await q
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync(ct);
+        }
+
+        public async Task<List<CashOutVoucher>> GetAllCashOutByShiftAsync(
+        int branchId,
+        int shiftId,
+        string? deviceId,
+        CancellationToken ct)
+        {
+            var q = _db.CashOutVouchers
+                .AsNoTracking()
+                .Where(x => x.BranchId == branchId && x.ShiftId == shiftId);
+
+            if (!string.IsNullOrWhiteSpace(deviceId))
+                q = q.Where(x => x.DeviceId == deviceId);
+
+            return await q
+                .OrderByDescending(x => x.CreatedAt)
+                .ToListAsync(ct);
+        }
     }
 }

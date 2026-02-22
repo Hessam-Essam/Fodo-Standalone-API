@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Fodo.Application.Features.Cash.CashIn
+namespace Fodo.Application.Features.Cash.CashOut.CreateCashOut
 {
-    public sealed record CreateCashInRequest(
+    public sealed record CreateCashOutRequest(
     int BranchId,
     int ShiftId,
     Guid? UserId,
