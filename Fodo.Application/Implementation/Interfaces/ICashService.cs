@@ -14,5 +14,6 @@ namespace Fodo.Application.Implementation.Interfaces
         Task<CreateCashOutResponse> CreateAsync(CreateCashOutRequest request, CancellationToken ct);
         Task<GetAllCashInResponse> GetAllAsync(GetAllCashInRequest request, CancellationToken ct);
         Task<GetAllCashOutResponse> GetAllAsync(GetAllCashOutRequest request, CancellationToken ct);
+        
     }
 }

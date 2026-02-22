@@ -19,14 +19,16 @@ namespace Fodo.Application.Implementation.Services
         private readonly IOrdersRepository _orderRepo;
         private readonly IMenuRepository _menuRepo;
         private readonly IPaymentsRepository _payRepo;
+        private readonly ICashRepository _cashRepo;
         private readonly IUnitOfWork _uow;
 
-        public ShiftService(IShiftRepository repo, IOrdersRepository orderRepo, IMenuRepository menuRepo, IPaymentsRepository payRepo, IUnitOfWork uow)
+        public ShiftService(IShiftRepository repo, ICashRepository cashRepo, IOrdersRepository orderRepo, IMenuRepository menuRepo, IPaymentsRepository payRepo, IUnitOfWork uow)
         {
             _repo = repo;
             _uow = uow;
             _orderRepo = orderRepo;
             _menuRepo = menuRepo;
+            _cashRepo = cashRepo;
             _payRepo = payRepo;
         }
 
@@ -86,21 +88,6 @@ namespace Fodo.Application.Implementation.Services
             return new StartShiftResponse(true, "Shift started successfully.", shift.ShiftId);
         }
 
-        /*
-         PSEUDOCODE (detailed plan):
-         - Validate request parameters (shift id, branch id, device id, user id, closing cash non-negative)
-         - Load the shift by id from repository
-         - Validate that shift exists, belongs to the provided branch and user, and is not already closed
-         - Set EndTime to UtcNow and set ClosingCash (rounded)
-         - Begin unit of work by awaiting _uow.BeginAsync(ct)
-         - In a try block:
-             - Update the shift via repository: await _repo.UpdateAsync(shift, ct)
-             - Persist changes: await _uow.SaveChangesAsync(ct)
-             - Commit the unit of work: await _uow.CommitAsync(ct)
-         - In catch:
-             - Attempt rollback: await _uow.RollbackAsync(ct) inside its own try/catch to avoid hiding original exception
-             - Rethrow the original exception
-        */
 
         public async Task<CloseShiftResponse> CloseShiftAsync(CloseShiftRequest request, CancellationToken ct)
         {
@@ -233,29 +220,6 @@ namespace Fodo.Application.Implementation.Services
 
         public async Task<EndDayResponse> EndDayAsync(EndDayRequest request, CancellationToken ct)
         {
-            /*
-             DETAILED PSEUDOCODE:
-             - Validate request parameters (branchId, shiftId, deviceId, closingCash)
-             - Load branch and shift and validate ownership
-             - Get order ids for the shift
-             - Get visa and cash payment method ids for the branch's client
-             - Compute visaSales and cashSales (guard for empty lists)
-             - Compute returnsAmount, cashIn, cashOut (placeholders for now)
-             - Compute currentBalance = OpeningCash + CashSales + CashIn - CashOut - Returns (rounded)
-             - finalBalance = Round(request.ClosingCash)
-             - Get lastOrderUtc
-             - Begin unit of work by awaiting _uow.BeginAsync(ct)
-             - Use try/catch:
-                 - Update shift (set EndTime and ClosingCash) via await _repo.UpdateAsync(shift, ct)
-                 - await _uow.SaveChangesAsync(ct)
-                 - await _uow.CommitAsync(ct)
-               In catch:
-                 - attempt rollback via await _uow.RollbackAsync(ct) inside its own try/catch
-                 - rethrow
-             - Return EndDayResponse with computed values
-             Note: Do NOT attempt to assign the result of BeginAsync to a variable since IUnitOfWork.BeginAsync returns Task (void-equivalent).
-            */
-
             if (request.BranchId <= 0)
                 return Fail("BranchId is required.");
 
@@ -297,8 +261,8 @@ namespace Fodo.Application.Implementation.Services
 
             // TODO: wire these when you provide tables (returns, cash in/out)
             var returnsAmount = 0m;
-            var cashIn = 0m;
-            var cashOut = 0m;
+            var cashIn = await _cashRepo.SumCashInByShiftAsync(request.BranchId, request.ShiftId, ct);
+            var cashOut = await _cashRepo.SumCashOutByShiftAsync(request.BranchId, request.ShiftId, ct);
 
             // CurrentBalance = OpeningCash + CashSales + CashIn - CashOut - Returns
             var currentBalance = Round(shift.OpeningCash + cashSales + cashIn - cashOut - returnsAmount);

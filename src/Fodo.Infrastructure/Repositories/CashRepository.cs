@@ -65,5 +65,21 @@ namespace Fodo.Infrastructure.Repositories
                 .OrderByDescending(x => x.CreatedAt)
                 .ToListAsync(ct);
         }
+
+        public async Task<decimal> SumCashInByShiftAsync(int branchId, int shiftId, CancellationToken ct)
+        {
+            return await _db.CashInVouchers
+                .AsNoTracking()
+                .Where(x => x.BranchId == branchId && x.ShiftId == shiftId)
+                .SumAsync(x => (decimal?)x.Amount, ct) ?? 0m;
+        }
+
+        public async Task<decimal> SumCashOutByShiftAsync(int branchId, int shiftId, CancellationToken ct)
+        {
+            return await _db.CashOutVouchers
+                .AsNoTracking()
+                .Where(x => x.BranchId == branchId && x.ShiftId == shiftId)
+                .SumAsync(x => (decimal?)x.Amount, ct) ?? 0m;
+        }
     }
 }

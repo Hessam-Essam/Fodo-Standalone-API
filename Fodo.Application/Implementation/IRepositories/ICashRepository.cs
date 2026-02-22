@@ -21,5 +21,8 @@ namespace Fodo.Application.Implementation.IRepositories
         int shiftId,
         string? deviceId,
         CancellationToken ct);
+
+        Task<decimal> SumCashInByShiftAsync(int branchId, int shiftId, CancellationToken ct);
+        Task<decimal> SumCashOutByShiftAsync(int branchId, int shiftId, CancellationToken ct);
     }
 }
