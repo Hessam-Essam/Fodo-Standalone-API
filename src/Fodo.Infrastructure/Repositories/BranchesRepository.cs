@@ -78,6 +78,80 @@ namespace Fodo.Infrastructure.Repositories
 
         public Task<List<TaxRules>> GetTaxRulesByClientAsync(int clientId)
             => _db.TaxRules.Where(x => x.ClientId == clientId).AsNoTracking().ToListAsync();
+
+        public async Task<List<ItemsModifierGroup>> GetItemModifierGroupsByItemIdsAsync(int clientId,IReadOnlyCollection<int> itemIds,CancellationToken ct = default)
+        {
+            if (clientId <= 0) 
+                throw new ArgumentOutOfRangeException(nameof(clientId));
+            if (itemIds == null) 
+                throw new ArgumentNullException(nameof(itemIds));
+            if (itemIds.Count == 0) 
+                return new List<ItemsModifierGroup>();
+
+            return await _db.ItemsModifierGroups
+                .AsNoTracking()
+                .Where(x => x.ClientId == clientId
+                            && x.IsActive
+                            && itemIds.Contains(x.ItemId))
+                .OrderBy(x => x.ItemId)
+                .ThenBy(x => x.SortOrder)
+                .ToListAsync(ct);
+        }
+
+        public async Task<List<ModifiersGroup>> GetModifierGroupsByIdsAsync(int clientId, IReadOnlyCollection<int> groupIds, CancellationToken ct = default)
+        {
+            if (clientId <= 0) 
+                throw new ArgumentOutOfRangeException(nameof(clientId));
+            if (groupIds == null) 
+                throw new ArgumentNullException(nameof(groupIds));
+            if (groupIds.Count == 0) 
+                return new List<ModifiersGroup>();
+
+            return await _db.ModifiersGroup
+                .AsNoTracking()
+                .Where(x => x.ClientId == clientId
+                            && x.IsActive
+                            && groupIds.Contains(x.Id))
+                .OrderBy(x => x.Id)
+                .ToListAsync(ct);
+        }
+
+        public async Task<List<Modifiers>> GetModifiersByGroupIdsAsync(int clientId,IReadOnlyCollection<int> groupIds, CancellationToken ct = default)
+        {
+            if (clientId <= 0) 
+                throw new ArgumentOutOfRangeException(nameof(clientId));
+            if (groupIds == null) 
+                throw new ArgumentNullException(nameof(groupIds));
+            if (groupIds.Count == 0) 
+                return new List<Modifiers>();
+
+            return await _db.Modifiers
+                .AsNoTracking()
+                .Where(x => x.ClientId == clientId
+                            && x.IsActive
+                            && groupIds.Contains(x.ModifierGroupId))
+                .OrderBy(x => x.ModifierGroupId)
+                .ThenBy(x => x.SortOrder) // sequence inside the group
+                .ThenBy(x => x.Id)
+                .ToListAsync(ct);
+        }
+
+        public async Task<List<ModifiersPricelist>> GetModifierPricelistsByModifierIdsAsync(IReadOnlyCollection<int> modifierIds, CancellationToken ct = default)
+        {
+            if (modifierIds == null) 
+                throw new ArgumentNullException(nameof(modifierIds));
+            if (modifierIds.Count == 0) 
+                return new List<ModifiersPricelist>();
+
+            // Note: ModifierPricelists table doesn't have ClientId (by design).
+            // We rely on modifierIds already being filtered by client in previous queries.
+            return await _db.ModifiersPricelist
+                .AsNoTracking()
+                .Where(x => modifierIds.Contains(x.ModifierId))
+                .OrderBy(x => x.ModifierId)
+                .ThenBy(x => x.PriceListId)
+                .ToListAsync(ct);
+        }
     }
 
 }

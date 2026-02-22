@@ -16,5 +16,6 @@ namespace Fodo.Contracts.DTOS
         public TaxRulesDto TaxRule { get; set; }
 
         public List<ItemPricesDto> Prices { get; set; }
+        public List<ModifiersGroupsDto> ModifierGroups { get; set; } = new();
     }
 }

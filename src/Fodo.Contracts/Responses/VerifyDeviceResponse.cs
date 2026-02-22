@@ -8,5 +8,6 @@ namespace Fodo.Contracts.Responses
     {
         public bool Success { get; set; }
         public string Message { get; set; }
+        public string? DeviceId { get; set; }
     }
 }

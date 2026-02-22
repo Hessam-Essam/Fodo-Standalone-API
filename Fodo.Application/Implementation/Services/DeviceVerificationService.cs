@@ -3,6 +3,7 @@ using Fodo.Application.Implementation.Interfaces;
 using Fodo.Application.Implementation.IRepositories;
 using Fodo.Contracts.DTOS;
 using Fodo.Contracts.Responses;
+using Fodo.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,11 +31,22 @@ namespace Fodo.Application.Implementation.Services
             if (string.IsNullOrEmpty(mac))
                 return new VerifyDeviceResponse { Success = false, Message = "MacAddress is required." };
 
-            var exists = await _deviceRepository.DeviceExistsAsync(request.BranchId, mac);
+            var device = await _deviceRepository.GetByBranchAndMacAsync(request.BranchId, mac);
 
-            return exists
-                ? new VerifyDeviceResponse { Success = true, Message = "Successfully found." }
-                : new VerifyDeviceResponse { Success = false, Message = "Device not found." };
+            if (device == null)
+                return new VerifyDeviceResponse
+                {
+                    Success = false,
+                    Message = "Device not found."
+                };
+
+            return new VerifyDeviceResponse
+            {
+                Success = true,
+                Message = "Successfully found.",
+                DeviceId = device.DeviceCode
+            };
         }
+
     }
 }

@@ -39,15 +39,15 @@ namespace Fodo.Web.Controllers
             var user = apiResult.Body.User;
 
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
-            new Claim(ClaimTypes.Name, user.Username ?? ""),
-            new Claim("UserId", user.UserId.ToString()),
-            new Claim("RoleId", user.RoleId.ToString()),
-            new Claim("ClientId", user.ClientId.ToString()),
-            new Claim("FullNameEn", user.FullNameEn ?? ""),
-            new Claim("FullNameAr", user.FullNameAr ?? "")
-        };
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                new Claim(ClaimTypes.Name, user.Username ?? ""),
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim("RoleId", user.RoleId.ToString()),
+                new Claim("ClientId", user.ClientId.ToString()),
+                new Claim("FullNameEn", user.FullNameEn ?? ""),
+                new Claim("FullNameAr", user.FullNameAr ?? "")
+            };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);

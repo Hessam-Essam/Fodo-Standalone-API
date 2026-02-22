@@ -16,5 +16,9 @@ namespace Fodo.Application.Implementation.IRepositories
         Task<List<ItemPricelists>> GetItemPricelistsByItemIdsAsync(List<int> itemIds);
         Task<List<PriceLists>> GetPriceListsByClientAsync(int clientId);
         Task<List<TaxRules>> GetTaxRulesByClientAsync(int clientId);
+        Task<List<ItemsModifierGroup>> GetItemModifierGroupsByItemIdsAsync(int clientId,IReadOnlyCollection<int> itemIds,CancellationToken ct = default);
+        Task<List<ModifiersGroup>> GetModifierGroupsByIdsAsync(int clientId, IReadOnlyCollection<int> groupIds, CancellationToken ct = default);
+        Task<List<Modifiers>> GetModifiersByGroupIdsAsync(int clientId, IReadOnlyCollection<int> groupIds, CancellationToken ct = default);
+        Task<List<ModifiersPricelist>> GetModifierPricelistsByModifierIdsAsync(IReadOnlyCollection<int> modifierIds, CancellationToken ct = default);
     }
 }

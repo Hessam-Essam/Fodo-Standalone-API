@@ -2,17 +2,13 @@ using Fodo.Application.Implementation.Interfaces;
 using Fodo.Application.Implementation.IRepositories;
 using Fodo.Application.Implementation.Services;
 using Fodo.Domain.Entities;
-using Fodo.Infrastructure.Persistence;
 using Fodo.Infrastructure.Repositories;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore; // Add this using directive
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using System;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,14 +17,24 @@ builder.Services.AddDbContext<Fodo.Infrastructure.Persistence.IdentityDbContext>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FoodoDatabase")));
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IBranchesService, BranchesService>();
 builder.Services.AddScoped<IDeviceVerificationService, DeviceVerificationService>();
 builder.Services.AddScoped<IBranchesRepository, BranchesRepository>();
+builder.Services.AddScoped<IPlaceOrderService, PlaceOrderService>();
+builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IClientRepository, ClientRepository>();
 builder.Services.AddScoped<IDeviceRepository, DeviceRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IShiftRepository, ShiftRepository>();
+builder.Services.AddScoped<IShiftService, ShiftService>();
+builder.Services.AddScoped<IOrdersService, OrdersService>();
+builder.Services.AddScoped<IPaymentsRepository, PaymentsRepository>();
+builder.Services.AddScoped<ICashRepository, CashRepository>();
+builder.Services.AddScoped<ICashService, CashService>();
 
 // choose one:
 builder.Services.AddScoped<IPasswordService, PasswordService>();

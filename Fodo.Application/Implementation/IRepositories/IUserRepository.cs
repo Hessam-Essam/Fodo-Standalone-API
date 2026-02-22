@@ -9,5 +9,7 @@ namespace Fodo.Application.Implementation.IRepositories
     {
         Task<List<User>> GetActiveUsersAsync();
         Task<User> GetByNormalizedUsernameAsync(string normalizedUsername);
+        Task<List<User>> GetUsersByIdsAsync(List<Guid> userIds, CancellationToken ct);
+        Task<Dictionary<Guid, (string? NameEn, string? NameAr)>> GetNamesByIdsAsync(IReadOnlyCollection<Guid> userIds, CancellationToken ct);
     }
 }

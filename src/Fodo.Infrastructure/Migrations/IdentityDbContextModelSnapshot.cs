@@ -71,6 +71,133 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("Branches", (string)null);
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.CashInVoucher", b =>
+                {
+                    b.Property<long>("CashInVoucherId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CashInVoucherId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("RowGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int")
+                        .HasColumnName("ShiftId");
+
+                    b.Property<DateTime?>("SyncedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("CashInVoucherId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CashInVouchers", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.CashOutVoucher", b =>
+                {
+                    b.Property<long>("CashOutVoucherId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("CashOutVoucherId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("CashOutVoucherId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<Guid>("RowGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int")
+                        .HasColumnName("ShiftId");
+
+                    b.Property<DateTime?>("SyncedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("CashOutVoucherId");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("RowGuid")
+                        .IsUnique();
+
+                    b.HasIndex("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("BranchId", "ShiftId", "CreatedAt");
+
+                    b.ToTable("CashOutVouchers", "dbo");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Categories", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -297,6 +424,486 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("Items", (string)null);
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.ItemsModifierGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int")
+                        .HasColumnName("item_id");
+
+                    b.Property<int>("ModifierGroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifierGroupId");
+
+                    b.HasIndex("ClientId", "ItemId");
+
+                    b.HasIndex("ItemId", "ModifierGroupId")
+                        .IsUnique();
+
+                    b.ToTable("ItemsModifierGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Modifiers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<decimal>("BasePrice")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("decimal(18,2)")
+                        .HasDefaultValue(0m);
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ModifierGroupId")
+                        .HasColumnType("int")
+                        .HasColumnName("ModifierGroupId");
+
+                    b.Property<string>("NameAr")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModifierGroupId");
+
+                    b.HasIndex("ClientId", "ModifierGroupId");
+
+                    b.ToTable("Modifiers", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ModifiersGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<bool>("IsActive")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("IsRequired")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("MaxSelect")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<int>("MinSelect")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<string>("NameAr")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("NameEn")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ModifierGroups", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ModifiersPricelist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ModifierId")
+                        .HasColumnType("int")
+                        .HasColumnName("ModifierId");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PriceListId")
+                        .HasColumnType("int")
+                        .HasColumnName("PriceListId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PriceListId");
+
+                    b.HasIndex("ModifierId", "PriceListId")
+                        .IsUnique();
+
+                    b.ToTable("ModifierPricelists", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderItemModifier", b =>
+                {
+                    b.Property<long>("OrderItemModifierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderItemModifierId"));
+
+                    b.Property<int>("ModifierGroupId")
+                        .HasColumnType("int")
+                        .HasColumnName("ModifierGroupId");
+
+                    b.Property<int>("ModifierId")
+                        .HasColumnType("int");
+
+                    b.Property<long>("OrderItemId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("OrderItemId");
+
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderItemModifierId");
+
+                    b.HasIndex("ModifierGroupId");
+
+                    b.HasIndex("OrderItemId");
+
+                    b.ToTable("OrderItemModifier", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderItems", b =>
+                {
+                    b.Property<long>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderItemId"));
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int")
+                        .HasColumnName("ItemId");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("OrderId");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Qty")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("ItemId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderRefund", b =>
+                {
+                    b.Property<long>("RefundId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("RefundId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RefundId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Reason")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<decimal>("RefundAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("RowGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion");
+
+                    b.Property<int>("ShiftId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("SyncedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RefundId");
+
+                    b.HasIndex("DeviceId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("RowGuid")
+                        .IsUnique();
+
+                    b.HasIndex("BranchId", "ShiftId", "CreatedAt");
+
+                    b.ToTable("OrderRefunds", "dbo");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Orders", b =>
+                {
+                    b.Property<long>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("OrderId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<Guid>("RowGuid")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("ShiftId")
+                        .HasColumnType("int")
+                        .HasColumnName("ShiftId");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<decimal>("SubTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("SyncedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TaxAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ShiftId");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Payment_Methods", b =>
+                {
+                    b.Property<int>("PaymentMethodId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("payment_method_id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentMethodId"));
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int")
+                        .HasColumnName("client_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("created_at");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit")
+                        .HasColumnName("is_active");
+
+                    b.Property<string>("MethodName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)")
+                        .HasColumnName("method_name");
+
+                    b.Property<string>("MethodType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("method_type");
+
+                    b.HasKey("PaymentMethodId");
+
+                    b.HasIndex("ClientId", "IsActive");
+
+                    b.ToTable("Payment_methods", "dbo");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Payments", b =>
+                {
+                    b.Property<long>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("PaymentId");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("PaymentId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Amount");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt");
+
+                    b.Property<string>("DeviceId")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("DeviceId");
+
+                    b.Property<bool>("IsSynced")
+                        .HasColumnType("bit")
+                        .HasColumnName("IsSynced");
+
+                    b.Property<string>("Method")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasColumnName("Method");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("OrderId");
+
+                    b.Property<int?>("PaymentMethodId")
+                        .HasColumnType("int")
+                        .HasColumnName("Payment_method_id");
+
+                    b.Property<Guid>("RowGuid")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("RowGuid");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("rowversion")
+                        .HasColumnName("RowVersion");
+
+                    b.Property<DateTime?>("SyncedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("SyncedAt");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PaymentMethodId");
+
+                    b.HasIndex("DeviceId", "CreatedAt");
+
+                    b.ToTable("Payments", "dbo");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Permission", b =>
                 {
                     b.Property<Guid>("Id")
@@ -396,6 +1003,43 @@ namespace Fodo.Infrastructure.Migrations
                     b.ToTable("RolePermissions");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.Shifts", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftId"));
+
+                    b.Property<int>("BranchId")
+                        .HasColumnType("int")
+                        .HasColumnName("BranchId");
+
+                    b.Property<decimal?>("ClosingCash")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("OpeningCash")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("ShiftId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("BranchId", "StartTime");
+
+                    b.ToTable("Shifts", (string)null);
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
                 {
                     b.Property<int>("TaxRuleId")
@@ -435,7 +1079,7 @@ namespace Fodo.Infrastructure.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ClientId")
+                    b.Property<int>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("client_id");
 
@@ -546,6 +1190,56 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("Clients");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.CashInVoucher", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branches")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Shifts", "Shifts")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.User", "Users")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Branches");
+
+                    b.Navigation("Shifts");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.CashOutVoucher", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branches")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Shifts", "Shifts")
+                        .WithMany()
+                        .HasForeignKey("ShiftId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.User", "Users")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Branches");
+
+                    b.Navigation("Shifts");
+
+                    b.Navigation("Users");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.Categories", b =>
                 {
                     b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
@@ -632,6 +1326,166 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("TaxRule");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.ItemsModifierGroup", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Items", "Item")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.ModifiersGroup", "ModifiersGroup")
+                        .WithMany("ItemsModifierGroup")
+                        .HasForeignKey("ModifierGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+
+                    b.Navigation("Item");
+
+                    b.Navigation("ModifiersGroup");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Modifiers", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.ModifiersGroup", "ModifiersGroup")
+                        .WithMany("Modifiers")
+                        .HasForeignKey("ModifierGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+
+                    b.Navigation("ModifiersGroup");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ModifiersGroup", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ModifiersPricelist", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Modifiers", "Modifiers")
+                        .WithMany("ModifiersPricelist")
+                        .HasForeignKey("ModifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.PriceLists", "PriceLists")
+                        .WithMany()
+                        .HasForeignKey("PriceListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Modifiers");
+
+                    b.Navigation("PriceLists");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderItemModifier", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.ModifiersGroup", "ModifiersGroup")
+                        .WithMany()
+                        .HasForeignKey("ModifierGroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.OrderItems", "OrderItems")
+                        .WithMany("Modifiers")
+                        .HasForeignKey("OrderItemId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("ModifiersGroup");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderItems", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Items", "Items")
+                        .WithMany()
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Orders", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Items");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Orders", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Shifts", "Shifts")
+                        .WithMany("Orders")
+                        .HasForeignKey("ShiftId");
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("Shifts");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Payment_Methods", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Clients");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Payments", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Orders", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.Payment_Methods", "PaymentMethod")
+                        .WithMany("Payments")
+                        .HasForeignKey("PaymentMethodId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Order");
+
+                    b.Navigation("PaymentMethod");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.PriceLists", b =>
                 {
                     b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
@@ -672,6 +1526,25 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.Shifts", b =>
+                {
+                    b.HasOne("Fodo.Domain.Entities.Branches", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Fodo.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
                 {
                     b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
@@ -687,7 +1560,9 @@ namespace Fodo.Infrastructure.Migrations
                 {
                     b.HasOne("Fodo.Domain.Entities.Clients", "Clients")
                         .WithMany()
-                        .HasForeignKey("ClientId");
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Fodo.Domain.Entities.Role", "Role")
                         .WithMany()
@@ -757,6 +1632,33 @@ namespace Fodo.Infrastructure.Migrations
                     b.Navigation("ItemPricelists");
                 });
 
+            modelBuilder.Entity("Fodo.Domain.Entities.Modifiers", b =>
+                {
+                    b.Navigation("ModifiersPricelist");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.ModifiersGroup", b =>
+                {
+                    b.Navigation("ItemsModifierGroup");
+
+                    b.Navigation("Modifiers");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.OrderItems", b =>
+                {
+                    b.Navigation("Modifiers");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Orders", b =>
+                {
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Payment_Methods", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
             modelBuilder.Entity("Fodo.Domain.Entities.PriceLists", b =>
                 {
                     b.Navigation("ItemPricelists");
@@ -765,6 +1667,11 @@ namespace Fodo.Infrastructure.Migrations
             modelBuilder.Entity("Fodo.Domain.Entities.Role", b =>
                 {
                     b.Navigation("Permissions");
+                });
+
+            modelBuilder.Entity("Fodo.Domain.Entities.Shifts", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Fodo.Domain.Entities.TaxRules", b =>
